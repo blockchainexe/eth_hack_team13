@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import ModalBasic from '../components/ModalBasic.vue'
+import ModalBasic from '~/components/ModalBasic'
 export default {
   data () {
     return {
