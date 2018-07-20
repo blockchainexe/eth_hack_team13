@@ -7,9 +7,21 @@
 </template>
 
 <script>
+import { uport } from '~/common/api/uport';
 export default {
   data () {
     return {};
+  },
+  mounted () {
+    this.requestCredentials();
+  },
+  methods: {
+    requestCredentials () {
+      uport.requestCredentials().then((credentials) => {
+        console.log(credentials);
+      });
+    }
+
   }
 };
 </script>
