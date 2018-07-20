@@ -9,10 +9,9 @@
 <script>
 export default {
   data () {
-    return {
-    }
+    return {};
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
