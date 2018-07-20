@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   mode: 'development',
   entry: [
-    'babel-polyfill', 
+    'babel-polyfill',
     './src/app.js'
   ],
   output: {
@@ -16,7 +16,7 @@ module.exports = {
   resolve: {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '~': path.resolve(__dirname, 'src'),
+      '~': path.resolve(__dirname, 'src')
     },
     extensions: ['*', '.js', '.vue', '.sass', '.scss', '.json']
   },
@@ -25,27 +25,27 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-            'vue-style-loader',
-            'css-loader',
-            'postcss-loader'
+          'vue-style-loader',
+          'css-loader',
+          'postcss-loader'
         ]
       },
       {
         test: /\.scss$/,
         use: [
-            'vue-style-loader',
-            'css-loader',
-            'sass-loader',
-            'postcss-loader'
+          'vue-style-loader',
+          'css-loader',
+          'sass-loader',
+          'postcss-loader'
         ]
       },
       {
         test: /\.sass/,
         use: [
-            'vue-style-loader',
-            'css-loader',
-            'sass-loader',
-            'postcss-loader'
+          'vue-style-loader',
+          'css-loader',
+          'sass-loader',
+          'postcss-loader'
         ]
       },
       {
@@ -72,11 +72,11 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/
-      },
+      }
     ]
   },
   plugins: [
     new VueLoaderPlugin(),
-    new HtmlWebpackPlugin({ template: 'index.html', hash: true }),
+    new HtmlWebpackPlugin({ template: 'index.html', hash: true })
   ]
-}
+};
