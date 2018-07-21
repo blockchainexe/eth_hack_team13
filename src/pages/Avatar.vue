@@ -28,6 +28,7 @@
 
 <script>
 import ModalBasic from '~/components/ModalBasic'
+import {addFriend} from '~/common/api/uport'
 export default {
   data () {
     return {
@@ -47,6 +48,7 @@ export default {
   },
   methods: {
     registerFriendQR: function(){
+      addFriend().then();
     },
     goToFriendList: function(){
       this.$router.push({ path: '/friends-list', query: { friendList: [] }})
@@ -68,6 +70,7 @@ export default {
 #avatar-img {
   padding: 60px;
   width: 70%;
+  max-width: 300px;
 }
 span {
   padding: 10px;
@@ -77,5 +80,11 @@ ul {
   height: 80%;
   overflow: scroll;
   padding: 0;
+}
+li {
+  border-bottom: medium solid #f7b399;
+}
+ul img {
+  width: 40px;
 }
 </style>

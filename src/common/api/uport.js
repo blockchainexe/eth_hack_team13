@@ -48,8 +48,13 @@ export const addFriend = () => {
   });
 };
 
+<<<<<<< HEAD
 export const getFriendList = () => {
   return myCredential.verified
+=======
+export const getFriendList = credentials => {
+  return credentials.verified
+>>>>>>> 4cd812c32a7e21f215c71a4ae057f9066fca870f
     .filter(v => typeof v.claim.friend !== 'undefined')
     .map(v => v.claim.friend);
 };

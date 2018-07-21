@@ -20,7 +20,7 @@ export default {
       showModal: false,
       imgSrc: "http://hanasaka-kidan.com/wp-content/uploads/2016/11/35f2dca61c1d9c731d0c2ed665c2e3e3.png",
       userName: "User Name",
-      itemList: [{itemImg: "item1", name: "name1"}, {itemImg: "item2", name: "name2"}]
+      itemList: [{itemImg: "https://pbs.twimg.com/media/CZEpQUjVIAEhW95.jpg", name: "食べ物"}, {itemImg: "https://1.bp.blogspot.com/-RMiYwU4Oyac/WLEu9stl0bI/AAAAAAABCG8/fZOmyaPrYt86F5g5D6jcU854muwPLpTgACLcB/s800/sumo_rikishi_harite2.png", name: "スポーツ"}, {itemImg: "https://4.bp.blogspot.com/-bT8YdNC856Q/WZP3lL87D2I/AAAAAAABF_k/daOTZl5hLu4UqGFGvYaDczC1PbSxTxWiwCLcBGAs/s800/manga_genkou.png", name:"漫画・アニメ"}]
     };
   },
   components: {
@@ -32,10 +32,16 @@ export default {
     }
   },
   mounted(){
+<<<<<<< HEAD
     login()
     .then(credential=>{
 
     })
+=======
+    login().then(credentials=>{
+      this.$router.push({ path: '/avatar', query: { imgSrc: this.imgSrc, userName: credentials.name, itemList: this.itemList }})
+    });
+>>>>>>> 4cd812c32a7e21f215c71a4ae057f9066fca870f
   }
 };
 </script>
