@@ -25,8 +25,10 @@ export const dbRead = (path) => {
 };
 
 export const dbReadOnce = (path) => {
-  firebase.database().ref(path).once('value').then(function(snapshot) {
+  return firebase.database().ref(path).once('value').then(function(snapshot) {
+    console.log(path);
     console.log(snapshot.val());
+    return snapshot.val();
   });
 };
 

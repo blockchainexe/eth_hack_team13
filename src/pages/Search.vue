@@ -1,20 +1,26 @@
 <template>
-  <div id = 'search'>
+  <div id = "search">
     <h3>Search New Friends</h3>
     <ul id = "ul_searchlist">
-      <li class = "li_searchlist" v-for="(list, index) in lists">
+      <li v-for="(list, index) in lists" class = "li_searchlist">
         <button class="show-modal" @click="modalIndex = index">
-          <span class = "search_avatar"><img class="avatar-img" alt="Avatar Image" :src="list.avtSrc"/></span>
-          <span class = "search_name">{{list.name}}</span>
-          <span class = "search_name">{{list.distance}}</span>
-          <span class = "search_item" v-for="itemSrc in list.itemSrcs">
-            <img class="item-img" alt="Item Image" :src="itemSrc.itemImg"/>
+          <span class = "search_avatar"><img :src="list.avtSrc" class="avatar-img" alt="Avatar Image"></span>
+          <span class = "search_name">{{ list.name }}</span>
+          <span class = "search_name">{{ list.distance }}</span>
+          <span v-for="itemSrc in list.itemSrcs" class = "search_item">
+            <img :src="itemSrc.itemImg" class="item-img" alt="Item Image">
           </span>
         </button>
         <modal-basic v-if="modalIndex == index" @close="modalIndex = -1">
+<<<<<<< HEAD
           <h3 slot="header">{{list.sex +','+ list.age +','+ list.country}}</h3>
           <div slot="body">{{list.profile}}</div>
           <div slot="footer"></div>
+=======
+          <h3 slot="header">{{ list.sex + ','+ list.country }}</h3>
+          <div slot="body"/>
+          <div slot="footer"/>
+>>>>>>> 96d94db9ba09fca3a573fd90f81f75a241f2cc5e
         </modal-basic>
       </li>
     </ul>
@@ -108,9 +114,9 @@ div#search{
               'avtSrc' : "http://hanasaka-kidan.com/wp-content/uploads/2016/11/35f2dca61c1d9c731d0c2ed665c2e3e3.png",
               'itemSrcs' :
                 [
-                  {itemImg: "https://pbs.twimg.com/media/CZEpQUjVIAEhW95.jpg", name: "food"},
-                  {itemImg: "https://1.bp.blogspot.com/-RMiYwU4Oyac/WLEu9stl0bI/AAAAAAABCG8/fZOmyaPrYt86F5g5D6jcU854muwPLpTgACLcB/s800/sumo_rikishi_harite2.png", name: "sport"},
-                  {itemImg: "https://4.bp.blogspot.com/-bT8YdNC856Q/WZP3lL87D2I/AAAAAAABF_k/daOTZl5hLu4UqGFGvYaDczC1PbSxTxWiwCLcBGAs/s800/manga_genkou.png", name:"anime"}
+                  { itemImg: 'https://pbs.twimg.com/media/CZEpQUjVIAEhW95.jpg', name: 'food' },
+                  { itemImg: 'https://1.bp.blogspot.com/-RMiYwU4Oyac/WLEu9stl0bI/AAAAAAABCG8/fZOmyaPrYt86F5g5D6jcU854muwPLpTgACLcB/s800/sumo_rikishi_harite2.png', name: 'sport' },
+                  { itemImg: 'https://4.bp.blogspot.com/-bT8YdNC856Q/WZP3lL87D2I/AAAAAAABF_k/daOTZl5hLu4UqGFGvYaDczC1PbSxTxWiwCLcBGAs/s800/manga_genkou.png', name: 'anime' }
                 ]
             }
           ]
