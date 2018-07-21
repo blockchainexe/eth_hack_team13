@@ -40,7 +40,8 @@ export const login = () => {
 export const attestCredentials = claim => {
   return uport.attestCredentials({
     sub: myCredential.address,
-    claim: claim
+    claim: claim,
+    notification: true
   }).then(res => res)
     .catch(error => {
       console.error(error);

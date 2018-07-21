@@ -2,20 +2,19 @@
   <div>
     <h1>Search New Friends</h1>
     <ul id = "ul_searchlist">
-      <li class = "li_searchlist" v-for="(list, index) in lists">
+      <li v-for="(list, index) in lists" class = "li_searchlist">
         <button class="show-modal" @click="modalIndex = index">
-          <span class = "search_avatar"><img class="avatar-img" alt="Avatar Image" :src="list.avtSrc"/></span>
-          <span class = "search_name">{{list.name}}</span>
-          <span class = "search_item" v-for="itemSrc in list.itemSrcs">
-            <img class="item-img" alt="Item Image" :src="itemSrc.itemImg"/>
+          <span class = "search_avatar"><img :src="list.avtSrc" class="avatar-img" alt="Avatar Image"></span>
+          <span class = "search_name">{{ list.name }}</span>
+          <span v-for="itemSrc in list.itemSrcs" class = "search_item">
+            <img :src="itemSrc.itemImg" class="item-img" alt="Item Image">
           </span>
-          <span class = "search_name">{{list.distance}}</span>
+          <span class = "search_name">{{ list.distance }}</span>
         </button>
         <modal-basic v-if="modalIndex == index" @close="modalIndex = -1">
-          <h3 slot="header">{{list.sex + ','+ list.country}}</h3>
-          <div slot="body">
-          </div>
-          <div slot="footer"></div>
+          <h3 slot="header">{{ list.sex + ','+ list.country }}</h3>
+          <div slot="body"/>
+          <div slot="footer"/>
         </modal-basic>
       </li>
     </ul>
@@ -31,7 +30,7 @@
 
   li.li_searchlist {
     padding: 3%;
-    width:50%;
+    /* width:50%; */
     border-bottom: 1px solid #ccc;
   }
 
@@ -85,45 +84,45 @@
 </style>
 
 <script>
-  import ModalBasic from '~/components/ModalBasic'
-  export default {
-    data() {
-      return {
-        showModal: false,
-        modalIndex: -1,
-        lists :
+import ModalBasic from '~/components/ModalBasic';
+export default {
+  components: {
+    ModalBasic
+  },
+  data () {
+    return {
+      showModal: false,
+      modalIndex: -1,
+      lists:
           [
             {
-              'avtSrc' : "http://hanasaka-kidan.com/wp-content/uploads/2016/11/35f2dca61c1d9c731d0c2ed665c2e3e3.png",
-              'name' : 'Tom',
-              'sex':'Man',
-              'country':'Poland',
-              'distance' : 'Nearby',
-              'itemSrcs' :
+              'avtSrc': 'http://hanasaka-kidan.com/wp-content/uploads/2016/11/35f2dca61c1d9c731d0c2ed665c2e3e3.png',
+              'name': 'Tom',
+              'sex': 'Man',
+              'country': 'Poland',
+              'distance': 'Nearby',
+              'itemSrcs':
                 [
-                  {itemImg: "https://pbs.twimg.com/media/CZEpQUjVIAEhW95.jpg", name: "food"},
-                  {itemImg: "https://1.bp.blogspot.com/-RMiYwU4Oyac/WLEu9stl0bI/AAAAAAABCG8/fZOmyaPrYt86F5g5D6jcU854muwPLpTgACLcB/s800/sumo_rikishi_harite2.png", name: "sport"},
-                  {itemImg: "https://4.bp.blogspot.com/-bT8YdNC856Q/WZP3lL87D2I/AAAAAAABF_k/daOTZl5hLu4UqGFGvYaDczC1PbSxTxWiwCLcBGAs/s800/manga_genkou.png", name:"anime"}
+                  { itemImg: 'https://pbs.twimg.com/media/CZEpQUjVIAEhW95.jpg', name: 'food' },
+                  { itemImg: 'https://1.bp.blogspot.com/-RMiYwU4Oyac/WLEu9stl0bI/AAAAAAABCG8/fZOmyaPrYt86F5g5D6jcU854muwPLpTgACLcB/s800/sumo_rikishi_harite2.png', name: 'sport' },
+                  { itemImg: 'https://4.bp.blogspot.com/-bT8YdNC856Q/WZP3lL87D2I/AAAAAAABF_k/daOTZl5hLu4UqGFGvYaDczC1PbSxTxWiwCLcBGAs/s800/manga_genkou.png', name: 'anime' }
                 ]
             },
             {
-              'avtSrc' : "http://hanasaka-kidan.com/wp-content/uploads/2016/11/35f2dca61c1d9c731d0c2ed665c2e3e3.png",
-              'name' : 'Ulrike',
-              'sex':'Woman',
-              'country':'Germany',
-              'distance' : 'Far',
-              'itemSrcs' :
+              'avtSrc': 'http://hanasaka-kidan.com/wp-content/uploads/2016/11/35f2dca61c1d9c731d0c2ed665c2e3e3.png',
+              'name': 'Ulrike',
+              'sex': 'Woman',
+              'country': 'Germany',
+              'distance': 'Far',
+              'itemSrcs':
                 [
-                  {itemImg: "https://pbs.twimg.com/media/CZEpQUjVIAEhW95.jpg", name: "food"},
-                  {itemImg: "https://1.bp.blogspot.com/-RMiYwU4Oyac/WLEu9stl0bI/AAAAAAABCG8/fZOmyaPrYt86F5g5D6jcU854muwPLpTgACLcB/s800/sumo_rikishi_harite2.png", name: "sport"},
-                  {itemImg: "https://4.bp.blogspot.com/-bT8YdNC856Q/WZP3lL87D2I/AAAAAAABF_k/daOTZl5hLu4UqGFGvYaDczC1PbSxTxWiwCLcBGAs/s800/manga_genkou.png", name:"anime"}
+                  { itemImg: 'https://pbs.twimg.com/media/CZEpQUjVIAEhW95.jpg', name: 'food' },
+                  { itemImg: 'https://1.bp.blogspot.com/-RMiYwU4Oyac/WLEu9stl0bI/AAAAAAABCG8/fZOmyaPrYt86F5g5D6jcU854muwPLpTgACLcB/s800/sumo_rikishi_harite2.png', name: 'sport' },
+                  { itemImg: 'https://4.bp.blogspot.com/-bT8YdNC856Q/WZP3lL87D2I/AAAAAAABF_k/daOTZl5hLu4UqGFGvYaDczC1PbSxTxWiwCLcBGAs/s800/manga_genkou.png', name: 'anime' }
                 ]
             }
           ]
-      }
-    },
-    components : {
-      ModalBasic
-    }
-  };
+    };
+  }
+};
 </script>
