@@ -11,6 +11,7 @@
 <script>
 
 import { addFriend, login } from '~/common/api/uport';
+import { dbWrite, initDB } from '~/common/api/firebase';
 import { initGeoLocation } from '~/common/api/gps';
 export default {
   data () {
@@ -23,7 +24,10 @@ export default {
   },
   mounted () {
     initGeoLocation();
+    initDB();
+    dbWrite('test', { id: 1 });
     login().then(credential => {
+      if (credential === null) {}
       console.log(credential);
       addFriend().then(() => { });
     });
