@@ -2,13 +2,13 @@
   <div class="container">
     <img id="avatar-img" alt="Avatar Image" :src="imgSrc"/>
     <span id="user-name"> {{userName}} </span>
-    <button id="register-friend-btn" @click="registerFriendQR">
+    <button id="register-friend-btn" @click="registerFriendQR" class="btn btn-primary" style="margin: 10px;">
       友達登録
     </button>
-    <button id="item-list-btn" @click="showItemModal=true">
+    <button id="item-list-btn" @click="showItemModal=true" class="btn btn-primary" style="margin: 10px;">
       アイテム
     </button>
-    <button id="friend-list-btn" @click="goToFriendList">
+    <button id="friend-list-btn" @click="goToFriendList"class="btn btn-success" style="margin: 10px;">
       友達一覧
     </button>
     <modal-basic v-if="showItemModal" @close="showItemModal = false">
