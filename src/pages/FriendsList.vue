@@ -63,6 +63,7 @@
 
 <script>
   import ModalBasic from '~/components/ModalBasic'
+  import {getFriendList} from '~/common/api/uport'
   export default {
     data() {
       return {
@@ -70,8 +71,9 @@
         modalIndex: -1,
         lists :
         [
+/*
           {
-          'name' : 'tom','item':'item1','meet':'Tokyo','date':'7/20',
+          'name' : 'tom','meet':'Tokyo','date':'7/20',
           'avtSrc': "http://hanasaka-kidan.com/wp-content/uploads/2016/11/35f2dca61c1d9c731d0c2ed665c2e3e3.png",
           'itemSrcs':
             [
@@ -80,12 +82,27 @@
             ]
           },
           {
-          'name' :'bob','item':'item2','meet':'Aomori','date':'7/19',
+          'name' :'bob','meet':'Aomori','date':'7/19',
           'avtSrc': "http://hanasaka-kidan.com/wp-content/uploads/2016/11/35f2dca61c1d9c731d0c2ed665c2e3e3.png",
           'itemSrcs': ["http://hanasaka-kidan.com/wp-content/uploads/2016/11/35f2dca61c1d9c731d0c2ed665c2e3e3.png"]
           }
+*/
         ]
       }
+    },
+    mounted(){
+    const friendList = getFriendList();
+    for(let friend of friendList) {
+          friend.meet = 'Aomori';
+          friend.date = '7/20';
+          friend.avtSrc = "http://hanasaka-kidan.com/wp-content/uploads/2016/11/35f2dca61c1d9c731d0c2ed665c2e3e3.png";
+          friend.itemSrcs =
+            [
+              "http://hanasaka-kidan.com/wp-content/uploads/2016/11/35f2dca61c1d9c731d0c2ed665c2e3e3.png",
+              "http://hanasaka-kidan.com/wp-content/uploads/2016/11/35f2dca61c1d9c731d0c2ed665c2e3e3.png"
+            ]
+          }
+          this.lists = [...this.lists, ...friendList];
     },
     components : {
       ModalBasic
