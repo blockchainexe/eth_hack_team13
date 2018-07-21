@@ -11,7 +11,7 @@
 <script>
 
 import { addFriend, login } from '~/common/api/uport';
-import { writeNewMessage, dbReadOnce, dbRead, dbWrite, initDB } from '~/common/api/firebase';
+import { saveImg, writeNewMessage, dbReadOnce, dbRead, dbWrite, initDB } from '~/common/api/firebase';
 import { initGeoLocation } from '~/common/api/gps';
 export default {
   data () {
@@ -31,6 +31,10 @@ export default {
     writeNewMessage(1, 'user1', 'hello');
     dbRead('test/id/1');
     dbWrite('test', { id: 2 });
+    //saveImg({'img/1/imgUrl': "http://hanasaka-kidan.com/wp-content/uploads/2016/11/35f2dca61c1d9c731d0c2ed665c2e3e3.png" });
+    dbReadOnce('img/1/imgUrl');
+    //saveImg({'img/2/imgUrl': "http://www.kumamotoiccard.jp/wp-content/themes/kumamonic/images/kumamon.png" });
+    dbReadOnce('img/2/imgUrl');
     login().then(credential => {
       if (credential === null) {}
       console.log(credential);

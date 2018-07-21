@@ -50,6 +50,7 @@
 <script>
 import { addFriend } from '~/common/api/uport';
 import ModalBasic from '~/components/ModalBasic';
+import {dbReadOnce} from '~/common/api/firebase';
 export default {
   components: {
     ModalBasic
@@ -67,27 +68,30 @@ export default {
   },
   created: function () {
     console.log(this.$route.query.itemList);
-    this.imgSrc = this.$route.query.imgSrc;
-    this.userName = this.$route.query.userName;
-    var updateItems = [];
-    var that = this;
-    console.log(that.$route.query.itemList);
-    this.categoryList.forEach(function (val) {
-      updateItems.push({ categoryName: val,
-        itemList: JSON.parse(that.$route.query.itemList)
-          .filter(v => v.categoryName === val)
-          .map(v => v) });
+    dbReadOnce('img/'+this.$route.query.character+'/imgUrl').then(src => {
+      this.imgSrc = src;
+      console.log(this.imgSrc);
+      this.userName = this.$route.query.userName;
+      var updateItems = [];
+      var that = this;
+      console.log(that.$route.query.itemList);
+      this.categoryList.forEach(function (val) {
+        updateItems.push({ categoryName: val,
+          itemList: JSON.parse(that.$route.query.itemList)
+            .filter(v => v.categoryName === val)
+            .map(v => v) });
+      });
+      this.itemList = [...this.itemList, ...updateItems];
+      var updateMyItems = [];
+      this.categoryList.forEach(function (val) {
+        updateMyItems.push({ categoryName: val,
+          itemList: JSON.parse(that.$route.query.myItemList)
+            .filter(v => v.categoryName === val)
+            .map(v => v) });
+      });
+      this.myItemList = [...this.myItemList, ...updateMyItems];
+      console.log(this.myItemList);
     });
-    this.itemList = [...this.itemList, ...updateItems];
-    var updateMyItems = [];
-    this.categoryList.forEach(function (val) {
-      updateMyItems.push({ categoryName: val,
-        itemList: JSON.parse(that.$route.query.myItemList)
-          .filter(v => v.categoryName === val)
-          .map(v => v) });
-    });
-    this.myItemList = [...this.myItemList, ...updateMyItems];
-    console.log(this.myItemList);
   },
   methods: {
     registerFriendQR: function () {

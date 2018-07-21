@@ -25,8 +25,10 @@ export const dbRead = (path) => {
 };
 
 export const dbReadOnce = (path) => {
-  firebase.database().ref(path).once('value').then(function(snapshot) {
+  return firebase.database().ref(path).once('value').then(function(snapshot) {
+    console.log(path);
     console.log(snapshot.val());
+    return snapshot.val();
   });
 };
 
@@ -41,4 +43,8 @@ export const writeNewMessage = (id, username, message) => {
   var updates = {};
   updates['test/id/'+id+'/messages/' + newPostKey] = postData;
   return firebase.database().ref().update(updates);
+}
+
+export const saveImg = (image) => {
+  return firebase.database().ref().update(image);
 }

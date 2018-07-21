@@ -74,6 +74,7 @@ export default {
         alert('Please pick your interest');
         return;
       }
+      user.character = Math.floor( Math.random() * 2 ) +1;
       attestCredentials({ profile: user }).then(() => {
         this.$router.push({ path: '/' });
       });
