@@ -10,7 +10,6 @@ $spinner-color: grey;
   display: flex;
   justify-content: center;
   align-items: center;
-//   z-index: 999;
   position: absolute;
   top: 0;
   left: 0;

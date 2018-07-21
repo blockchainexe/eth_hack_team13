@@ -23,10 +23,16 @@ export default {
   mounted () {
     const monitorModal = setInterval(() => {
       const modal = document.getElementById('uport-qr');
+      if (modal === null) {
+        return;
+      }
       const qr = modal.getElementsByTagName('img');
       if (qr.length) {
-        this.loading = true;
-        clearInterval(monitorModal);
+        /* アニメーション対策 */
+        setTimeout(() => {
+          this.loading = true;
+          clearInterval(monitorModal);
+        }, 1000);
       }
     }, 100);
     login().then(credentials => {
