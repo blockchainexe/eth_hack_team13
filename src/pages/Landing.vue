@@ -32,16 +32,9 @@ export default {
     }
   },
   mounted(){
-<<<<<<< HEAD
-    login()
-    .then(credential=>{
-
-    })
-=======
     login().then(credentials=>{
       this.$router.push({ path: '/avatar', query: { imgSrc: this.imgSrc, userName: credentials.name, itemList: this.itemList }})
     });
->>>>>>> 4cd812c32a7e21f215c71a4ae057f9066fca870f
   }
 };
 </script>
