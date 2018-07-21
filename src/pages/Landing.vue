@@ -5,11 +5,7 @@
     <modal-basic v-if="showModal" @close="showModal = false">
       <h3 slot="header">friend name</h3>
       <div slot="body">detail</div>
-      <div slot="footer">
-        <button class="modal-default-button" @click="$emit('close')">
-          Close
-        </button>
-      </div>
+      <div slot="footer"></div>
     </modal-basic>
   </div>
 </template>
