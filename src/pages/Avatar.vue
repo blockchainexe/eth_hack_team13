@@ -2,6 +2,9 @@
   <div class="container">
     <img id="avatar-img" alt="Avatar Image" :src="imgSrc"/>
     <span id="user-name"> {{userName}} </span>
+    <button id="search-btn" @click="goToSearch">
+      Search New Friends
+    </button>
     <button id="register-friend-btn" @click="registerFriendQR">
       Register Friends
     </button>
@@ -53,6 +56,9 @@ export default {
     },
     goToFriendList: function(){
       this.$router.push({ path: '/friends-list', query: { friendList: [] }})
+    },
+    goToSearch: function(){
+      this.$router.push({ path: '/search', query: { search: [] }})
     }
   },
 };

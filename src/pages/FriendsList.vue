@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>List of Friends</h3>
+    <h1>List of Friends</h1>
     <ul id = "ul_friendlist">
       <li class = "li_friendlist" v-for="(list, index) in lists">
         <button class="show-modal" @click="modalIndex = index">
@@ -25,7 +25,7 @@
 <style scoped>
   li.li_friendlist {
     padding: 3%;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid rgba(0, 0, 0, .5);
   }
 
   ul#ul_friendlist {
