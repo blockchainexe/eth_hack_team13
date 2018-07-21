@@ -13,6 +13,7 @@
 
 <script>
 import ModalBasic from '~/components/ModalBasic'
+import {login} from '~/common/api/uport'
 export default {
   data () {
     return {
@@ -29,6 +30,11 @@ export default {
     goToAvatar: function(){
       this.$router.push({ path: '/avatar', query: { imgSrc: this.imgSrc, userName: this.userName, itemList: this.itemList }})
     }
+  },
+  mounted(){
+    login().then(credentials=>{
+      this.$router.push({ path: '/avatar', query: { imgSrc: this.imgSrc, userName: credentials.name, itemList: this.itemList }})
+    });
   }
 };
 </script>

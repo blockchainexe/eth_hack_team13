@@ -50,6 +50,6 @@ export const addFriend = () => {
 
 export const getFriendList = credentials => {
   return credentials.verified
-    .filter(v => typeof v.claim.friendAddress !== 'undefined')
-    .map(v => v.claim.friendAddress);
+    .filter(v => typeof v.claim.friend !== 'undefined')
+    .map(v => v.claim.friend);
 };

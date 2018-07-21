@@ -28,6 +28,7 @@
 
 <script>
 import ModalBasic from '~/components/ModalBasic'
+import {addFriend} from '~/common/api/uport'
 export default {
   data () {
     return {
@@ -47,6 +48,7 @@ export default {
   },
   methods: {
     registerFriendQR: function(){
+      addFriend().then();
     },
     goToFriendList: function(){
       this.$router.push({ path: '/friends-list', query: { friendList: [] }})
