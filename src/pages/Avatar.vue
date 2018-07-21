@@ -2,14 +2,17 @@
   <div class="container">
     <img id="avatar-img" alt="Avatar Image" :src="imgSrc"/>
     <span id="user-name"> {{userName}} </span>
+    <button id="search-btn" @click="goToSearch">
+      Search New Friends
+    </button>
     <button id="register-friend-btn" @click="registerFriendQR">
-      友達登録
+      Register Friends
     </button>
     <button id="item-list-btn" @click="showItemModal=true">
-      アイテム
+      Items
     </button>
     <button id="friend-list-btn" @click="goToFriendList">
-      友達一覧
+      List of Friends
     </button>
     <modal-basic v-if="showItemModal" @close="showItemModal = false">
       <h3 slot="header">Item List</h3>
@@ -39,6 +42,7 @@ export default {
     };
   },
   created: function () {
+    console.log(this.$route.query.itemList);
     this.imgSrc = this.$route.query.imgSrc;
     this.userName = this.$route.query.userName;
     this.itemList = this.$route.query.itemList;
@@ -52,6 +56,9 @@ export default {
     },
     goToFriendList: function(){
       this.$router.push({ path: '/friends-list', query: { friendList: [] }})
+    },
+    goToSearch: function(){
+      this.$router.push({ path: '/search', query: { search: [] }})
     }
   },
 };
