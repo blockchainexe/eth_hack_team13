@@ -18,9 +18,28 @@ export const requestCredentials = (req) => {
     });
 };
 
-export const attestCredentials = (player, claim) => {
+export let myCredential = {};
+
+export const login = () => {
+  return requestCredentials({ requested: ['name', 'country'], verified: ['friend', 'profile'] }).then(credential => {
+    myCredential = credential;
+    let notFound = true;
+    for (let v of myCredential.verified) {
+      if (v.claim.profile) {
+        console.log('not found');
+        notFound = false;
+      }
+    }
+    if (notFound) {
+      return null;
+    }
+    return credential;
+  });
+};
+
+export const attestCredentials = claim => {
   return uport.attestCredentials({
-    sub: player.address,
+    sub: myCredential.address,
     claim: claim
   }).then(res => res)
     .catch(error => {
@@ -29,19 +48,10 @@ export const attestCredentials = (player, claim) => {
     });
 };
 
-export let myCredential = {};
-
-export const login = () => {
-  return requestCredentials({ requested: ['name', 'country'], verified: ['friend'] }).then(credential => {
-    myCredential = credential;
-    return credential;
-  });
-};
-
 export const addFriend = () => {
   return requestCredentials({ requested: ['name', 'country'] }).then(friend => {
     setTimeout(() => {
-      return attestCredentials(myCredential, {
+      return attestCredentials({
         'friend': { address: friend.address, name: friend.name, country: friend.country }
       });
     }, 1000);

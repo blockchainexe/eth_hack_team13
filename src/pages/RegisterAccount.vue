@@ -1,8 +1,6 @@
 <template>
   <div class="container">
     <h2>Register Your Account</h2>
-    <div class="tag">Name</div>
-    <input v-model="user.name" type="text" class="user-input">
     <div class="tag">Gender</div>
     <select v-model.number="user.gender" class="gender">
       <option value="0">-</option>
@@ -32,17 +30,18 @@
       <label for="sport"><input id="sport" v-model="user.interest" type="radio" value="sport"> Sport</label>
       <label for="anime"><input id="anime" v-model="user.interest" type="radio" value="anime"> Anime</label>
     </div>
+    <button class="register" @click="register">Register</button>
   </div>
 </template>
 
 <script>
+import { attestCredentials } from '~/common/api/uport';
+
 export default {
   data () {
     return {
-      isForeigner: true,
       user: {
-        name: '',
-        gender: '',
+        gender: 0,
         birthday: {
           day: 0, month: 0, year: 0
         },
@@ -59,6 +58,22 @@ export default {
         years.push(i);
       }
       return years;
+    }
+  },
+  methods: {
+    register () {
+      const user = this.user;
+      if (user.birthday.day === 0 || user.birthday.month === 0 || user.birthday.year === 0) {
+        alert('Please enter your birthday');
+        return;
+      }
+      if (user.interest === '') {
+        alert('Please pick your interest');
+        return;
+      }
+      attestCredentials({ profile: user }).then(() => {
+        this.$router.push({ path: '/' });
+      });
     }
   }
 };
@@ -90,5 +105,17 @@ export default {
           width: 80px;
         }
     }
+}
+.register {
+  $btn-color:#27ae60;
+  margin: 10px;
+  width: 250px;
+  padding: 10px;
+  box-sizing: border-box;
+  color: #FFF;
+  background: $btn-color;
+  &:hover {
+    background: darken($btn-color, 20%);
+  }
 }
 </style>
