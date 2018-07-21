@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>List of Friends</h1>
+    <h3>List of Friends</h3>
     <ul id = "ul_friendlist">
       <li class = "li_friendlist" v-for="(list, index) in lists">
         <button class="show-modal" @click="modalIndex = index">
@@ -13,6 +13,7 @@
         <modal-basic v-if="modalIndex == index" @close="modalIndex = -1">
           <h3 slot="header">{{list.name}}</h3>
           <div slot="body">
+            <p>Country: {{list.country}}</p>
             <p>You met him/her in {{list.meet}} at {{list.date}}.</p>
           </div>
           <div slot="footer"></div>
@@ -67,7 +68,7 @@
     padding-top:10px;
     padding-right:15px;
     margin-left:10px;
-    font-size:3em;
+    font-size:1em;
   }
 
   span.friends_item {
