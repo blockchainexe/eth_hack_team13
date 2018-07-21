@@ -13,10 +13,12 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.18.0",
+    "uport-connect": "^0.7.3",
     "vue": "^2.5.16",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
+    "ajv": "^6.5.2",
     "autoprefixer": "^8.6.5",
     "babel-eslint": "^8.2.6",
     "babel-loader": "^7.1.5",
