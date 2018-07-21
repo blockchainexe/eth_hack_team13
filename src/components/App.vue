@@ -10,7 +10,7 @@
 
 <script>
 
-import { addFriend, attestCredentials, getFriendList, login, myCredential, requestCredentials } from '~/common/api/uport';
+import { addFriend, login } from '~/common/api/uport';
 import { initGeoLocation } from '~/common/api/gps';
 export default {
   data () {
