@@ -18,15 +18,34 @@ export const requestCredentials = (req) => {
     });
 };
 
-export const attestCredentials = (player, friendAddress) => {
+export const attestCredentials = (player, claim) => {
   return uport.attestCredentials({
     sub: player.address,
-    claim: { 'friendAddress': friendAddress }
+    claim: claim// { 'friendAddress': friendAddress }
   }).then(res => res)
     .catch(error => {
       console.error(error);
       return null;
     });
+};
+
+export let myCredential = {};
+
+export const login = () => {
+  return requestCredentials({ requested: ['name', 'country'], verified: ['friend'] }).then(credential => {
+    myCredential = credential;
+    return credential;
+  });
+};
+
+export const addFriend = () => {
+  return requestCredentials({ requested: ['name', 'country'] }).then(friend => {
+    setTimeout(() => {
+      return attestCredentials(myCredential, {
+        'friend': { address: friend.address, name: friend.name, country: friend.country }
+      });
+    }, 1000);
+  });
 };
 
 export const getFriendList = credentials => {

@@ -10,7 +10,7 @@
 
 <script>
 
-import { attestCredentials, getFriendList, requestCredentials } from '~/common/api/uport';
+import { addFriend, attestCredentials, getFriendList, login, myCredential, requestCredentials } from '~/common/api/uport';
 export default {
   data () {
     return {
@@ -29,13 +29,18 @@ export default {
     //     });
     //   }, 1000);
     // });
-    requestCredentials({ requested: ['name', 'country'], verified: ['friendAddress'] }).then(credential => {
-      this.credential.name = credential.name;
-      this.credential.country = credential.country;
+    login().then(credential => {
       console.log(credential);
-      console.log(getFriendList(credential));
-      attestCredentials(credential, '0x02').then(res => {});
+      addFriend().then(() => { });
     });
+
+    // requestCredentials({ requested: ['name', 'country'], verified: ['friend'] }).then(credential => {
+    //   this.credential.name = credential.name;
+    //   this.credential.country = credential.country;
+    //   console.log(credential);
+    //   console.log(getFriendList(credential));
+    //   attestCredentials(credential, '0x02').then(res => {});
+    // });
   }
 };
 </script>
