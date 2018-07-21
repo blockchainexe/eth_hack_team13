@@ -1,54 +1,61 @@
 <template>
-    <div>
-        Chat Room
-        <div v-for="(log, index) in chatLog" :key="index">
-            <div v-if="log.isMyMessage" class="myMessages">
-                <img class="myIcon" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSD89KXgMqFPTsqrpRYt7HVyK3Jy_8MNhhfabTFaORiiTtrCWPB8Q" alt=""/>
-                <p class="myMessage">{{ log.msg }}</p>
-            </div>
-            <div v-if="!log.isMyMessage" class="othersMessages">
-                <img class="othersIcon" src="http://emilcarlsson.se/assets/mikeross.png" alt=""/>
-                <p class="othersMessage">{{ log.msg }}</p>
-            </div>
-        </div>
-        <div class="message-input">
-            <div class="wrap">
-                <input type="text" placeholder="Write your message..." class="input-box form-control">
-                <button class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
-            </div>
-        </div>
+  <div>
+    Chat Room
+    <div v-for="(log, index) in chatLog" :key="index">
+      <div v-if="log.isMyMessage" class="myMessages">
+        <img class="myIcon" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSD89KXgMqFPTsqrpRYt7HVyK3Jy_8MNhhfabTFaORiiTtrCWPB8Q" alt="">
+        <p class="myMessage">{{ log.msg }}</p>
+      </div>
+      <div v-if="!log.isMyMessage" class="othersMessages">
+        <img class="othersIcon" src="http://emilcarlsson.se/assets/mikeross.png" alt="">
+        <p class="othersMessage">{{ log.msg }}</p>
+      </div>
     </div>
+    <div class="message-input">
+      <div class="wrap">
+        <input v-model="message" type="text" placeholder="Write your message..." class="input-box form-control">
+        <button class="submit" @click="postMessage"><i class="fa fa-paper-plane" aria-hidden="true"/></button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        chatLog: [
+import { endChatSession, sendChatMessage, startChatSession } from '~/common/api/chat';
+import { myCredential } from '~/common/api/uport';
+export default {
+  data () {
+    return {
+      message: '',
+      chatLog: []
+    };
+  },
+  mounted () {
+    startChatSession('test', snapShot => {
+      const chatLog = snapShot.val();
+      console.log(chatLog);
+      if (chatLog) {
+        this.chatLog = chatLog.map(c => (
           {
-            msg: 'こんにちは僕はくまモンです',
-            isMyMessage: true
-          },
-          {
-            msg: 'Hello! Kumamon??',
-            isMyMessage: false
-          },
-          {
-            msg: 'くまモンは熊本のご当地キャラクターなんです',
-            isMyMessage: true
-          },
-          {
-            msg: 'I want to go to Kumamoto :)',
-            isMyMessage: false
-          }
-        ]
-      };
-    }, mounted() {
-
+            msg: c.msg,
+            isMyMessage: c.sender === myCredential.address
+          })
+        );
+      }
+    });
+  },
+  beforeDestroy () {
+    endChatSession();
+  },
+  methods: {
+    postMessage () {
+      if (this.message === '') { return; }
+      sendChatMessage('test', this.chatLog.length, this.message);
     }
-  };
+  }
+};
 </script>
-<style>
+<style>c
     .myMessages, .othersMessages {
         display: flex;
         display: inline-block;
