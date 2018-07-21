@@ -94,6 +94,9 @@ div#search{
 
 <script>
   import ModalBasic from '~/components/ModalBasic'
+  import {initGeoLocation} from '~/common/api/gps'
+  import {initGeoLocation} from '~/common/api/firebase'
+
   export default {
     data() {
       return {
@@ -132,6 +135,21 @@ div#search{
     },
     components : {
       ModalBasic
-    }
+    },
+      mounted : function() {
+        const mylongitude = initGeoLocation.longitude;
+        const mylatitude = initGeoLocation.latitude;
+        const radius = 6371;
+    /*
+        var gpsRef = firebase.database().ref('posts/' + postId + '/gps');
+        gpsRef.on('value', function(snapshot) {
+          updateStarCount(postElement, snapshot.val());
+        });
+        for (let snapshot of shot) { /*ハッシュがいる*/
+          shot.distance = Math.PI/180 * radius
+            * Math.sqrt(((shot.longitude-mylongitude))**2+((shot.latitude-mylatitude))**2)
+        }
+  */
+      }
   };
 </script>
