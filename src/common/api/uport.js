@@ -21,7 +21,7 @@ export const requestCredentials = (req) => {
 export let myCredential = {};
 
 export const login = () => {
-  return requestCredentials({ requested: ['name', 'country'], verified: ['friend', 'profile'] }).then(credential => {
+  return requestCredentials({ requested: ['name', 'country'], verified: ['friend', 'profile', 'interest'] }).then(credential => {
     myCredential = credential;
     let notFound = true;
     for (let v of myCredential.verified) {
@@ -50,13 +50,33 @@ export const attestCredentials = claim => {
 };
 
 export const addFriend = () => {
-  return requestCredentials({ requested: ['name', 'country'] }).then(friend => {
-    setTimeout(() => {
-      return attestCredentials({
-        'friend': { address: friend.address, name: friend.name, country: friend.country }
-      });
-    }, 1000);
+  return requestCredentials({ requested: ['name', 'country'], verified: ['profile'] }).then(friend => {
+    return new Promise((resolve, reject) =>{
+      setTimeout(() => {
+         attestCredentials({
+          'friend': { address: friend.address, name: friend.name, country: friend.country }
+        }).then(result => {
+          console.log(result);
+          if(result === "ok"){
+            console.log(friend.profile.interest);
+            resolve({interest: friend.profile.interest, friendAddress: friend.address, friendName: friend.name});
+          } else {
+            reject({});
+          }
+        });
+      }, 1000);
+    })
   });
+};
+
+export const addItem = (item, friend) => {
+  return new Promise((resolve, reject) =>{
+    setTimeout(() => {
+        return attestCredentials({
+          'item': { friendAddress: friend.friendAddress, friendName: friend.friendName, itemId: item, categoryName: friend.interest }
+        }).then(resolve());
+      }, 1000);
+    });
 };
 
 export const getFriendList = () => {
