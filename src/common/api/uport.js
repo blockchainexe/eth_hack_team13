@@ -48,8 +48,8 @@ export const addFriend = () => {
   });
 };
 
-export const getFriendList = credentials => {
-  return credentials.verified
-    .filter(v => typeof v.claim.friendAddress !== 'undefined')
-    .map(v => v.claim.friendAddress);
+export const getFriendList = () => {
+  return myCredential.verified
+    .filter(v => typeof v.claim.friend !== 'undefined')
+    .map(v => v.claim.friend);
 };
