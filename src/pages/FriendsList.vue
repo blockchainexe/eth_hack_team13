@@ -23,9 +23,16 @@
 </template>
 
 <style scoped>
+
+  button.show-modal {
+    width: 100%;
+    background-color: #D3DEF1;
+  }
+
   li.li_friendlist {
     padding: 3%;
-    border-bottom: 1px solid rgba(0, 0, 0, .5);
+    width:50%;
+    border-bottom: 1px solid #ccc;
   }
 
   ul#ul_friendlist {
@@ -33,12 +40,17 @@
   }
 
   img.avatar-img {
+    padding : 0px;
     height: 80px;
     width: 80px;
-    object-fit: contain
+    object-fit: contain;
+    background: white;
   }
 
   img.item-img {
+    padding-top:10px;
+    float:left;
+    padding-left:5px;
     height: 50px;
     width: 50px;
     object-fit: contain
@@ -46,12 +58,15 @@
 
   span.friends_avatar {
     float:left;
-    width: 10%;
+    padding-right: 5px;
+    border-right: 1px solid #ccc;
   }
 
   span.friends_name {
-    margin-left: 50px;
-    width:10%;
+    float:left;
+    padding-top:10px;
+    padding-right:15px;
+    margin-left:10px;
     font-size:3em;
   }
 
