@@ -2,26 +2,40 @@
   <div class="container">
     <div>
       <h1>Hello World!</h1>
+      <h3>{{ credential.name }}</h3>
+      <h3>{{ credential.country }}</h3>
     </div>
   </div>
 </template>
 
 <script>
-import { uport } from '~/common/api/uport';
+
+import { attestCredentials, getFriendList, requestCredentials } from '~/common/api/uport';
 export default {
   data () {
-    return {};
+    return {
+      credential: {
+        name: '',
+        country: ''
+      }
+    };
   },
   mounted () {
-    this.requestCredentials();
-  },
-  methods: {
-    requestCredentials () {
-      uport.requestCredentials().then((credentials) => {
-        console.log(credentials);
-      });
-    }
-
+    // requestCredentials().then(res => {
+    //   console.log('c1', res);
+    //   setTimeout(() => {
+    //     requestCredentials().then(res => {
+    //       console.log('c2', res);
+    //     });
+    //   }, 1000);
+    // });
+    requestCredentials({ requested: ['name', 'country'], verified: ['friendAddress'] }).then(credential => {
+      this.credential.name = credential.name;
+      this.credential.country = credential.country;
+      console.log(credential);
+      console.log(getFriendList(credential));
+      attestCredentials(credential, '0x02').then(res => {});
+    });
   }
 };
 </script>
