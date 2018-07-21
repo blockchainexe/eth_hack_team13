@@ -1,18 +1,15 @@
 <template>
   <div class="container">
     <img id="avatar-img" :src="imgSrc" alt="Avatar Image">
-    <h2 id="user-name"> {{ userName }} </h2>
-    <button id="search-btn" @click="goToSearch">
-      Search New Friends
+    <span id="user-name"> {{ userName }} </span>
+    <button id="register-friend-btn" class="btn btn-primary" style="margin: 10px;" @click="registerFriendQR">
+      友達登録
     </button>
-    <button id="register-friend-btn" @click="registerFriendQR">
-      Register Friends
+    <button id="item-list-btn" class="btn btn-primary" style="margin: 10px;" @click="showItemModal=true">
+      アイテム
     </button>
-    <button id="item-list-btn" @click="showItemModal=true">
-      Item List
-    </button>
-    <button id="friend-list-btn" @click="goToFriendList">
-      List of Friends
+    <button id="friend-list-btn" class="btn btn-success"style="margin: 10px;" @click="goToFriendList">
+      友達一覧
     </button>
     <modal-basic v-if="showItemModal" @close="showItemModal = false">
       <h3 slot="header">Item List</h3>
@@ -49,8 +46,8 @@
 
 <script>
 import { addFriend } from '~/common/api/uport';
+import { dbReadOnce } from '~/common/api/firebase';
 import ModalBasic from '~/components/ModalBasic';
-import {dbReadOnce} from '~/common/api/firebase';
 export default {
   components: {
     ModalBasic
@@ -68,7 +65,7 @@ export default {
   },
   created: function () {
     console.log(this.$route.query.itemList);
-    dbReadOnce('img/'+this.$route.query.character+'/imgUrl').then(src => {
+    dbReadOnce('img/' + this.$route.query.character + '/imgUrl').then(src => {
       this.imgSrc = src;
       console.log(this.imgSrc);
       this.userName = this.$route.query.userName;
