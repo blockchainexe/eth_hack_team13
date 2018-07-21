@@ -12,9 +12,8 @@
           </span>
         </button>
         <modal-basic v-if="modalIndex == index" @close="modalIndex = -1">
-          <h3 slot="header">{{list.sex + ','+ list.country}}</h3>
-          <div slot="body">
-          </div>
+          <h3 slot="header">{{list.sex +','+ list.age +','+ list.country}}</h3>
+          <div slot="body">{{list.profile}}</div>
           <div slot="footer"></div>
         </modal-basic>
       </li>
@@ -95,34 +94,18 @@ div#search{
 <script>
   import ModalBasic from '~/components/ModalBasic'
   import {initGeoLocation} from '~/common/api/gps'
-  import {initGeoLocation} from '~/common/api/firebase'
+  import {dbRead} from '~/common/api/firebase'
 
   export default {
     data() {
       return {
         showModal: false,
         modalIndex: -1,
-        lists :
+        lists : []
+/*
           [
             {
               'avtSrc' : "http://hanasaka-kidan.com/wp-content/uploads/2016/11/35f2dca61c1d9c731d0c2ed665c2e3e3.png",
-              'name' : 'Tom',
-              'sex':'Man',
-              'country':'Poland',
-              'distance' : 'Nearby',
-              'itemSrcs' :
-                [
-                  {itemImg: "https://pbs.twimg.com/media/CZEpQUjVIAEhW95.jpg", name: "food"},
-                  {itemImg: "https://1.bp.blogspot.com/-RMiYwU4Oyac/WLEu9stl0bI/AAAAAAABCG8/fZOmyaPrYt86F5g5D6jcU854muwPLpTgACLcB/s800/sumo_rikishi_harite2.png", name: "sport"},
-                  {itemImg: "https://4.bp.blogspot.com/-bT8YdNC856Q/WZP3lL87D2I/AAAAAAABF_k/daOTZl5hLu4UqGFGvYaDczC1PbSxTxWiwCLcBGAs/s800/manga_genkou.png", name:"anime"}
-                ]
-            },
-            {
-              'avtSrc' : "http://hanasaka-kidan.com/wp-content/uploads/2016/11/35f2dca61c1d9c731d0c2ed665c2e3e3.png",
-              'name' : 'Ulrike',
-              'sex':'Woman',
-              'country':'Germany',
-              'distance' : 'Far',
               'itemSrcs' :
                 [
                   {itemImg: "https://pbs.twimg.com/media/CZEpQUjVIAEhW95.jpg", name: "food"},
@@ -131,6 +114,7 @@ div#search{
                 ]
             }
           ]
+*/
       }
     },
     components : {
@@ -140,15 +124,19 @@ div#search{
         const mylongitude = initGeoLocation.longitude;
         const mylatitude = initGeoLocation.latitude;
         const radius = 6371;
-    /*
-        var gpsRef = firebase.database().ref('posts/' + postId + '/gps');
+    /*距離を計算
+        var gpsRef = firebase.database().ref('/gps');
         gpsRef.on('value', function(snapshot) {
           updateStarCount(postElement, snapshot.val());
         });
-        for (let snapshot of shot) { /*ハッシュがいる*/
-          shot.distance = Math.PI/180 * radius
-            * Math.sqrt(((shot.longitude-mylongitude))**2+((shot.latitude-mylatitude))**2)
+        for (let snapshot of shot) {
+          const key =Object.key(shot);
+          let shot.key.distance = Math.PI/180 * radius
+            * Math.sqrt(((shot.key.longitude-mylongitude))**2+((shot.key.latitude-mylatitude))**2);
+          shot.key.distance = round(shot.key.distance);
         }
+        this.lists = [...this.lists, ...snapshot];
+        _.sortBy(lists, 'distance');
   */
       }
   };

@@ -11,7 +11,7 @@
 <script>
 
 import { addFriend, login } from '~/common/api/uport';
-import { writeNewMessage, dbReadOnce, dbRead, dbWrite, initDB } from '~/common/api/firebase';
+import { writeNewGps } from '~/common/api/firebase';
 import { initGeoLocation } from '~/common/api/gps';
 export default {
   data () {
@@ -23,14 +23,7 @@ export default {
     };
   },
   mounted () {
-    initGeoLocation();
-    initDB();
-    dbRead('test/id');
-    dbReadOnce('test/id');
-    dbWrite('test', { id: 1 });
-    writeNewMessage(1, 'user1', 'hello');
-    dbRead('test/id/1');
-    dbWrite('test', { id: 2 });
+    writeNewGps(5,'user1','40','54');
     login().then(credential => {
       if (credential === null) {}
       console.log(credential);

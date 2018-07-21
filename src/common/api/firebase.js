@@ -41,4 +41,18 @@ export const writeNewMessage = (id, username, message) => {
   var updates = {};
   updates['test/id/'+id+'/messages/' + newPostKey] = postData;
   return firebase.database().ref().update(updates);
-}
+};
+
+export const writeNewGps = (id, username, longitude,latitude) => {
+  var postData = {
+    username: username,
+    longitude: longitude,
+    latitude: latitude
+  };
+  // Get a key for a new Post.
+  var newPostKey = firebase.database().ref().child('gps').push().key;
+  // Write the new post's data simultaneously in the posts list and the user's post list.
+  var updates = {};
+  updates['test/id/'+id+'/gps/' + newPostKey] = postData;
+  return firebase.database().ref().update(updates);
+};
