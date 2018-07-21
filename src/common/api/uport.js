@@ -21,7 +21,7 @@ export const requestCredentials = (req) => {
 export const attestCredentials = (player, claim) => {
   return uport.attestCredentials({
     sub: player.address,
-    claim: claim// { 'friendAddress': friendAddress }
+    claim: claim
   }).then(res => res)
     .catch(error => {
       console.error(error);

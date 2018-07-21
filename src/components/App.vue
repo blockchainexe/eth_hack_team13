@@ -11,6 +11,7 @@
 <script>
 
 import { addFriend, attestCredentials, getFriendList, login, myCredential, requestCredentials } from '~/common/api/uport';
+import { initGeoLocation } from '~/common/api/gps';
 export default {
   data () {
     return {
@@ -21,26 +22,11 @@ export default {
     };
   },
   mounted () {
-    // requestCredentials().then(res => {
-    //   console.log('c1', res);
-    //   setTimeout(() => {
-    //     requestCredentials().then(res => {
-    //       console.log('c2', res);
-    //     });
-    //   }, 1000);
-    // });
+    initGeoLocation();
     login().then(credential => {
       console.log(credential);
       addFriend().then(() => { });
     });
-
-    // requestCredentials({ requested: ['name', 'country'], verified: ['friend'] }).then(credential => {
-    //   this.credential.name = credential.name;
-    //   this.credential.country = credential.country;
-    //   console.log(credential);
-    //   console.log(getFriendList(credential));
-    //   attestCredentials(credential, '0x02').then(res => {});
-    // });
   }
 };
 </script>
