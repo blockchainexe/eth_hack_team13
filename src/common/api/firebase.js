@@ -33,7 +33,7 @@ export const dbReadOnce = (path) => {
 };
 
 export const writeNewMessage = (id, username, message) => {
-  var postData = {
+  const postData = {
     username: username,
     message: message,
   };
@@ -46,15 +46,13 @@ export const writeNewMessage = (id, username, message) => {
 };
 
 export const writeNewGps = (id, username, longitude,latitude) => {
-  var postData = {
+  const postData = {
     username: username,
     longitude: longitude,
     latitude: latitude
   };
-  // Get a key for a new Post.
-  var newPostKey = firebase.database().ref().child('gps').push().key;
   // Write the new post's data simultaneously in the posts list and the user's post list.
-  var updates = {};
-  updates['test/id/'+id+'/gps/' + newPostKey] = postData;
+  let updates = {};
+  updates['test/id/'+id+'/gps/' + '1'] = postData;
   return firebase.database().ref().update(updates);
 };
