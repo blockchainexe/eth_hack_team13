@@ -170,6 +170,7 @@ export default {
 }
 
 .right {
+  width: 50%;
   flex-grow: 1
 }
 

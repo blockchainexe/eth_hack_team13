@@ -1,8 +1,8 @@
 <template>
   <div class="navbar">
-    <div class="nav-items">CHAT</div>
-    <div class="nav-items">HOME</div>
-    <div class="nav-items">FREINDS</div>
+    <div class="nav-items"><i class="material-icons">chat</i>CHAT</div>
+    <div class="nav-items"><i class="material-icons">home</i>HOME</div>
+    <div class="nav-items"><i class="material-icons">supervisor_account</i>FRIENDS</div>
   </div>
 </template>
 <style lang="scss" scoped>
@@ -24,8 +24,14 @@
   color: #FFF;
   flex-grow: 1;
   border-right: 1px solid #FFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   &:hover {
     background-color:darken(#FF9800, 20%);
+  }
+  & > .material-icons {
+    padding: 5px;
   }
 }
 </style>
