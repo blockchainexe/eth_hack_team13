@@ -1,12 +1,12 @@
 <template>
-  <div class="container">
-    <div class="nav-items">a</div>
-    <div class="nav-items">a</div>
-    <div class="nav-items">a</div>
+  <div class="navbar">
+    <div class="nav-items">CHAT</div>
+    <div class="nav-items">HOME</div>
+    <div class="nav-items">FREINDS</div>
   </div>
 </template>
 <style lang="scss" scoped>
-.container {
+.navbar{
   $height: 80px;
   position:fixed;
   bottom: 0;
@@ -20,6 +20,12 @@
 }
 
 .nav-items {
+  background-color: #FF9800;
+  color: #FFF;
   flex-grow: 1;
+  border-right: 1px solid #FFF;
+  &:hover {
+    background-color:darken(#FF9800, 20%);
+  }
 }
 </style>

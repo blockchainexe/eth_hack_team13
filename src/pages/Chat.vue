@@ -24,14 +24,23 @@
 import { endChatSession, sendChatMessage, startChatSession } from '~/common/api/chat';
 import { myCredential } from '~/common/api/uport';
 export default {
+  props: {
+    chatRoomId: {
+      required: false,
+      default: 'test',
+      type: String
+    }
+  },
   data () {
     return {
       message: '',
       chatLog: []
     };
   },
+  created () {
+  },
   mounted () {
-    startChatSession('test', snapShot => {
+    startChatSession(this.chatRoomId, snapShot => {
       const chatLog = snapShot.val();
       console.log(chatLog);
       if (chatLog) {
@@ -50,7 +59,7 @@ export default {
   methods: {
     postMessage () {
       if (this.message === '') { return; }
-      sendChatMessage('test', this.chatLog.length, this.message);
+      sendChatMessage(this.chatRoomId, this.chatLog.length, this.message);
     }
   }
 };
