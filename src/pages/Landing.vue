@@ -6,8 +6,8 @@
 
 <script>
 import { login } from '~/common/api/uport';
+import { updateUserGps } from '~/app';
 import Spinner from '~/components/Spinner';
-
 export default {
   components: {
     Spinner
@@ -41,6 +41,7 @@ export default {
       if (credentials === null) {
         this.$router.push({ path: '/register' });
       } else {
+        updateUserGps();
         this.$router.push({ path: '/avatar', query: { character: credentials.profile.character, userName: credentials.name, itemList: this.itemList, myItemList: this.myItemList } });
       }
     });

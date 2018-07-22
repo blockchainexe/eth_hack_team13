@@ -22,7 +22,7 @@ export const requestCredentials = (req) => {
     });
 };
 
-export let myCredential = {};
+export let myCredential = null;
 
 export const login = () => {
   return requestCredentials({
@@ -34,7 +34,7 @@ export const login = () => {
     let notFound = true;
     for (let v of myCredential.verified) {
       if (v.claim.profile) {
-        console.log('not found');
+        console.log('profile not found');
         notFound = false;
       }
     }
