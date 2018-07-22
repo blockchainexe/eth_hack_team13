@@ -60,8 +60,8 @@
 
 <script>
 import { addFriend, addItem } from '~/common/api/uport';
+import { dbReadOnce } from '~/common/api/firebase';
 import ModalBasic from '~/components/ModalBasic';
-import {dbReadOnce} from '~/common/api/firebase';
 export default {
   components: {
     ModalBasic
@@ -84,7 +84,7 @@ export default {
   },
   created: function () {
     console.log(this.$route.query.itemList);
-    dbReadOnce('img/'+this.$route.query.character+'/imgUrl').then(src => {
+    dbReadOnce('img/' + this.$route.query.character + '/imgUrl').then(src => {
       this.imgSrc = src;
       console.log(this.imgSrc);
       this.userName = this.$route.query.userName;
