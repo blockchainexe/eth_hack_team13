@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id = 'friends'>
     <h3>List of Friends</h3>
     <ul id = "ul_friendlist">
       <li v-for="(list, index) in lists" class = "li_friendlist">
@@ -25,6 +25,13 @@
 
 <style scoped>
 
+ div#friends {
+   display: flex;
+   flex-flow: column nowrap;
+   justify-content: center;
+   align-items: center;
+ }
+
   button.show-modal {
     width: 100%;
     background-color: #D3DEF1;
@@ -32,7 +39,6 @@
 
   li.li_friendlist {
     padding: 3%;
-    /* width:50%; */
     border-bottom: 1px solid #ccc;
   }
 

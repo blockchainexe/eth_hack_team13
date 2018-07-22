@@ -1,113 +1,55 @@
 <template>
-  <div id = "search">
-    <h3>Search New Friends</h3>
-    <ul id = "ul_searchlist">
-      <li v-for="(list, index) in lists" class = "li_searchlist">
-        <button class="show-modal" @click="modalIndex = index">
-          <!--          <span class = "search_avatar"><img :src="list.avtSrc" class="avatar-img" alt="Avatar Image"></span> -->
-          <span class = "search_name">{{ list.username }}</span>
-          <span class = "search_name">{{ list.distance + ' km' }}</span>
-          <!--          <span v-for="itemSrc in list.itemSrcs" class = "search_item">
-            <img :src="itemSrc.itemImg" class="item-img" alt="Item Image">
-          </span>  -->
-        </button>
-        <modal-basic v-if="modalIndex == index" @close="modalIndex = -1">
-          <h3 slot="header">{{ list.sex + ', '+ list.country }}</h3>
-          <div slot="body">
-            <div @click="startChat(list)">Chat!</div>
+  <div>
+    <navbar-top/>
+    <div class="container">
+      <div id="container-main">
+        <div class = "flex-container" v-for="list in lists" @click="showModal(list)">
+          <div class = "flex-first-low">
+            <div class = "top-left-fig">
+              <img id="avatar-img" :src="list.avtSrc" alt="Avatar Image">
+            </div>
+            <div class = "top-right-attr">
+              <div class = "attr-columns">{{ list.username }}</div>
+              <div class = "attr-columns">{{ list.country }}</div>
+              <div class = "attr-columns">{{ list.distance + " km" }}</div>
+              <!--<div @click="startChat(list)">Chat!</div>-->
+            </div>
           </div>
-          <div slot="footer"/>
-        </modal-basic>
-      </li>
-    </ul>
+        </div>
+      </div>
+    </div>
+    <modal-basic v-if="isShowModal==true" @close="isShowModal=false">
+      <h3 slot="header">Go to chat</h3>
+      <div slot="body" @click="startChat">
+        <span > Chat!! </span>
+      </div>
+      <div slot="footer">
+      </div>
+    </modal-basic>
+    <navbar-bottom/>
   </div>
 </template>
 
-<style scoped>
-
-div#search{
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-  align-items: center;
-}
-
-  button.show-modal {
-  background-color: #D3DEF1;
-  }
-
-  li.li_searchlist {
-    padding: 3%;
-    border-bottom: 1px solid #ccc;
-  }
-
-  ul#ul_searchlist {
-    list-style:none;
-  }
-
-  img.avatar-img {
-    padding : 0px;
-    height: 60px;
-    width: 60px;
-    object-fit: contain;
-    background: white;
-  }
-
-  img.item-img {
-    padding-top:10px;
-    float:left;
-    padding-left:5px;
-    height: 40px;
-    width: 40px;
-    object-fit: contain;
-  }
-
-  span.search_avatar {
-    float:left;
-    padding-right: 5px;
-    border-right: 1px solid #ccc;
-  }
-
-  span.search_name {
-    display:block;
-    float:left;
-    padding-top:10px;
-    padding-right:15px;
-    margin-left:10px;
-    font-size:1em;
-  }
-
-  span.search_distance {
-    display:block;
-    float:left;
-    padding-top:10px;
-    float:left;
-    width:10%;
-    font-size:1em;
-    color:red;
-  }
-
-  span.search_item {
-    margin-left: 100px;
-    width:3%;
-  }
-</style>
-
 <script>
+import NavbarBottom from '~/components/NavbarBottom';
+import NavbarTop from '~/components/NavbarTop';
 import { dbReadOnce } from '~/common/api/firebase';
 import { initGeoLocation } from '~/common/api/gps';
 import { myCredential } from '~/common/api/uport';
-import ModalBasic from '~/components/ModalBasic';
 import _ from 'lodash';
+import ModalBasic from '~/components/ModalBasic'
+
 export default {
   components: {
+    NavbarTop,
+    NavbarBottom,
     ModalBasic
   },
   data () {
     return {
-      showModal: false,
-      modalIndex: -1,
-      lists: []
+      lists: [],
+      isShowModal: false,
+      room: ""
     };
   },
   mounted () {
@@ -115,6 +57,7 @@ export default {
       console.log(geoLocation);
       const mylongitude = geoLocation.longitude;
       const mylatitude = geoLocation.latitude;
+
       console.log(mylatitude);
       const radius = 6371;
       dbReadOnce('test/id').then(snapshot => {
@@ -133,19 +76,25 @@ export default {
           shot['sex'] = shot.gps[2].sex === 0 ? 'Man' : 'Female';
           shot['country'] = shot.gps[2].country;
           shot['address'] = shot.gps[2].address;
+          dbReadOnce('img/' + shot.gps[2].character + '/imgUrl')
+          .then(src => {
+            shot['avtSrc'] = src;
+            console.log(shot['avtSrc']);
+            this.lists = [...this.lists, ...snapArray];
+            _.sortBy(this.lists, 'distance');
+          });
 
           snapArray.push(shot);
         });
         console.log(snapArray);
-        this.lists = [...this.lists, ...snapArray];
 
-        _.sortBy(this.lists, 'distance');
         console.log(snapshot);
       });
     });
   },
   methods: {
-    startChat (item) {
+    startChat: function () {
+      let item = this.room;
       const addr1 = item.address;
       const addr2 = myCredential.address;
       let p = '';
@@ -155,7 +104,56 @@ export default {
         p = addr2 + addr1;
       }
       this.$router.push({ path: '/chat', query: { room: p } });
+    },
+    showModal: function (list) {
+      this.room = list;
+      this.isShowModal = true;
     }
   }
 };
 </script>
+
+<style>
+#container-main {
+  display: inline-flex;
+  flex-wrap: wrap;
+  width: 100%;
+  flex-grow: 1;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  flex-grow: 2;
+}
+
+.flex-first-low {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 3;
+}
+
+.top-left-fig {
+  width: 40%;
+  flex-grow: 4;
+}
+
+img#avatar-img {
+width: 70%;
+height: 70%;
+object-fit: contain;
+}
+
+.top-right-attr {
+  width: 60%;
+  flex-grow: 4;
+  font-size: 1em;
+  display:flex;
+  flex-direction: column;
+}
+.attr-columns{
+  flex-grow : 5
+}
+
+</style>
