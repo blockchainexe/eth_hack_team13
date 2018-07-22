@@ -27,7 +27,7 @@ export let myCredential = null;
 export const login = () => {
   return requestCredentials({
     requested: ['name', 'country'],
-    verified: ['friend', 'profile', 'interest'],
+    verified: ['friend', 'profile', 'interest', 'item'],
     notifications: true
   }).then(credential => {
     myCredential = credential;
@@ -82,7 +82,11 @@ export const addItem = (item, friend) => {
     setTimeout(() => {
         return attestCredentials({
           'item': { friendAddress: friend.friendAddress, friendName: friend.friendName, itemId: item, categoryName: friend.interest }
-        }).then(resolve());
+        }).then(() => {
+          login().then(credentials => {
+            resolve()
+          });
+        });
       }, 1000);
     });
 };
@@ -91,4 +95,10 @@ export const getFriendList = () => {
   return myCredential.verified
     .filter(v => typeof v.claim.friend !== 'undefined')
     .map(v => v.claim.friend);
+};
+
+export const getItemList = () => {
+  return myCredential.verified
+    .filter(v => typeof v.claim.item !== 'undefined')
+    .map(v => v.claim.item);
 };

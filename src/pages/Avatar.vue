@@ -9,16 +9,16 @@
       Register Friends
     </button>
     <button id="item-list-btn" @click="showItemModal=true">
-      Item List
+      My Items
     </button>
     <button id="friend-list-btn" @click="goToFriendList">
       List of Friends
     </button>
     <modal-basic v-if="showItemModal" @close="showItemModal = false">
-      <h3 slot="header">Item List</h3>
+      <h3 slot="header">My Items</h3>
       <div slot="body">
-        <button @click="showItem='mine'">My Items</button>
-        <button @click="showItem='gift'">Giftable Items</button>
+        <!--<button @click="showItem='mine'">My Items</button>-->
+        <!--<button @click="showItem='gift'">Giftable Items</button>-->
         <ul v-if="showItem==='mine'" class="categories">
           <li v-for="category in myItemList" v-if="category.itemList.length > 0">
             <span> {{ category.categoryName }} </span>
@@ -47,8 +47,8 @@
     <modal-basic v-if="showChooseItemModal" @close="showChooseItemModal = false">
       <h3 slot="header">Choose Item</h3>
       <div slot="body">
-        <div v-for="option in ItemOptions">
-          <input v-model="selectItem" type="radio" :value="option.id"><img :src="option.imgSrc"/>
+        <div v-for="option in ItemOptions" class="itemList">
+          <input v-model="selectItem" type="radio" :value="option.id"><img :src="option.imgUrl" class="itemIcon"/>
         </div>
       </div>
       <div slot="footer">
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { addFriend, addItem } from '~/common/api/uport';
+import { addFriend, addItem, getItemList } from '~/common/api/uport';
 import { dbReadOnce } from '~/common/api/firebase';
 import ModalBasic from '~/components/ModalBasic';
 export default {
@@ -77,7 +77,7 @@ export default {
       showItem: 'mine',
       ItemOptions: [],
       showChooseItemModal: false,
-      itemDict: {food:[{id: 1, imgUrl: ""}, {id: 2, imgUrl: ""}, {id: 3, imgUrl: ""}], sport:[{id: 1, imgUrl: ""}, {id: 2, imgUrl: ""}, {id: 3, imgUrl: ""}], anime:[{id: 1, imgUrl: ""}, {id: 2, imgUrl: ""}, {id: 3, imgUrl: ""}]},
+      itemDict: {food:[{id: 1, imgUrl: "https://pbs.twimg.com/media/CZEpQUjVIAEhW95.jpg"}, {id: 2, imgUrl: "http://houraikai.or.jp/wp-content/uploads/2017/04/nigirizushi_moriawase.png"}, {id: 3, imgUrl: "http://livedoor.blogimg.jp/buzzrall/imgs/b/3/b3dbae38.jpg"}], sport:[{id: 1, imgUrl: "https://1.bp.blogspot.com/-RMiYwU4Oyac/WLEu9stl0bI/AAAAAAABCG8/fZOmyaPrYt86F5g5D6jcU854muwPLpTgACLcB/s800/sumo_rikishi_harite2.png"}, {id: 2, imgUrl: "http://cpimages.s3.amazonaws.com/system/samples/work/sample/166916/large_10_.png"}, {id: 3, imgUrl: "https://3.bp.blogspot.com/-v_oGK4YfIk4/UV1I_tUcFlI/AAAAAAAAPQ0/p9xViZSaSr4/s1600/judo_boy.png"}], anime:[{id: 1, imgUrl: "http://livedoor.blogimg.jp/ayunet55/imgs/3/9/392b0bfe.jpg"}, {id: 2, imgUrl: "https://eizandensha.co.jp/event/wp-content/uploads/sites/11/2017/03/aoba.jpg"}, {id: 3, imgUrl: "http://realsound.jp/wp-content/uploads/2017/11/20171125-3lion-1-950x534.jpg"}]},
       newFriend: {friendName: "", friendAddress: "", interest: ""},
       selectItem: 0
     };
@@ -101,10 +101,16 @@ export default {
       var updateMyItems = [];
       this.categoryList.forEach(function (val) {
         updateMyItems.push({ categoryName: val,
-          itemList: JSON.parse(that.$route.query.myItemList)
+          itemList: getItemList()
             .filter(v => v.categoryName === val)
             .map(v => v) });
       });
+      updateMyItems.forEach((items)=>{
+        console.log(items);
+        items.itemList.forEach((item, i) => {
+          item.itemImg = this.itemDict[items.categoryName][i].imgUrl;
+        })
+      })
       this.myItemList = [...this.myItemList, ...updateMyItems];
       console.log(this.myItemList);
     });
@@ -131,7 +137,11 @@ export default {
     requestAddItem: function() {
       addItem(this.selectItem, this.newFriend).then(() => {
         this.showChooseItemModal = false;
-        this.myItemList[this.categoryList.indexOf(this.newFriend.interest)].itemList.push({itemImg: this.itemDict[this.newFriend.interest][this.selectItem].imgUrl, friendName: this.newFriend.friendName});
+        if(this.myItemList[this.categoryList.indexOf(this.newFriend.interest)]){
+          this.myItemList[this.categoryList.indexOf(this.newFriend.interest)].itemList.push({itemImg: this.itemDict[this.newFriend.interest][this.selectItem-1].imgUrl, friendName: this.newFriend.friendName});
+        }else {
+          this.myItemList[this.categoryList.indexOf(this.newFriend.interest)] = {itemList:[{itemImg: this.itemDict[this.newFriend.interest][this.selectItem-1].imgUrl, friendName: this.newFriend.friendName}]};
+        }
       });
     }
   }
@@ -214,7 +224,15 @@ ul img {
   &:hover {
     background: darken($color, 20%);
   }
+}
 
+.itemIcon {
+   width: 40px;
+}
+.itemList {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 </style>
