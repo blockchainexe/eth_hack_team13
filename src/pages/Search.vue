@@ -115,21 +115,19 @@ div#search{
           console.log(mylatitude)
           const radius = 6371;
           dbReadOnce('test/id').then(snapshot => {
-           snapshot.splice(0, 1);
             for (let shot of snapshot) {
               console.log(shot)
-              const diffLong = shot.gps[2]['longitude'] - mylongitude;
-              const diffLat = shot.gps[2]['latitude']-mylatitude;
+              const diffLong = shot.gps[1]['longitude'] - mylongitude;
+              const diffLat = shot.gps[1]['latitude']-mylatitude;
               console.log(diffLong, diffLat)
               shot['distance'] = Math.PI/180 * radius * Math.sqrt(diffLong ** 2 + diffLat **2);
               shot['distance'] = Math.round(shot['distance']);
-              shot['latitude']= shot.gps[2].latitude;
-              shot['longitude']= shot.gps[2].longitude;
-              shot['username'] = shot.gps[2].username;
-              shot['sex'] = shot.gps[2].sex;
-              shot['age'] = shot.gps[2].age;
-              shot['country'] = shot.gps[2].country;
-              shot['address'] = shot.gps[2].address;
+              shot['latitude']= shot.gps[1].latitude;
+              shot['longitude']= shot.gps[1].longitude;
+              shot['username'] = shot.gps[1].username;
+              shot['sex'] = shot.gps[1].sex;
+              shot['country'] = shot.gps[1].country;
+              shot['address'] = shot.gps[1].address;
             }
             this.lists = [...this.lists, ...snapshot];
 
