@@ -151,15 +151,11 @@ export default {
     requestAddItem: function () {
       addItem(this.selectItem, this.newFriend).then(() => {
         this.showChooseItemModal = false;
-<<<<<<< HEAD
         if(this.myItemList[this.categoryList.indexOf(this.newFriend.interest)]){
           this.myItemList[this.categoryList.indexOf(this.newFriend.interest)].itemList.push({itemImg: this.itemDict[this.newFriend.interest][this.selectItem-1].imgUrl, friendName: this.newFriend.friendName});
         }else {
           this.myItemList[this.categoryList.indexOf(this.newFriend.interest)] = {itemList:[{itemImg: this.itemDict[this.newFriend.interest][this.selectItem-1].imgUrl, friendName: this.newFriend.friendName}]};
         }
-=======
-        this.myItemList[this.categoryList.indexOf(this.newFriend.interest)].itemList.push({ itemImg: this.itemDict[this.newFriend.interest][this.selectItem].imgUrl, friendName: this.newFriend.friendName });
->>>>>>> 2320e23a1a76be3379c3cad97f7947ea13c815d9
       });
     }
   }
