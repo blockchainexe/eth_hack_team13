@@ -4,17 +4,17 @@
     <ul id = "ul_searchlist">
       <li v-for="(list, index) in lists" class = "li_searchlist">
         <button class="show-modal" @click="modalIndex = index">
-          <span class = "search_avatar"><img :src="list.avtSrc" class="avatar-img" alt="Avatar Image"></span>
-          <span class = "search_name">{{ list.name }}</span>
+<!--          <span class = "search_avatar"><img :src="list.avtSrc" class="avatar-img" alt="Avatar Image"></span> -->
+          <span class = "search_name">{{ list.username }}</span>
           <span class = "search_name">{{ list.distance }}</span>
-          <span v-for="itemSrc in list.itemSrcs" class = "search_item">
+<!--          <span v-for="itemSrc in list.itemSrcs" class = "search_item">
             <img :src="itemSrc.itemImg" class="item-img" alt="Item Image">
-          </span>
+          </span>  -->
         </button>
         <modal-basic v-if="modalIndex == index" @close="modalIndex = -1">
-          <h3 slot="header">{{ list.sex + ','+ list.country }}</h3>
-          <div slot="body"/>
-          <div slot="footer"/>
+          <h3 slot="header">{{list.sex +','+ list.age +','+ list.country}}</h3>
+          <div slot="body">{{list.profile}}</div>
+          <div slot="footer"></div>
         </modal-basic>
       </li>
     </ul>
@@ -92,37 +92,21 @@ div#search{
 </style>
 
 <script>
-import ModalBasic from '~/components/ModalBasic';
-export default {
-  components: {
-    ModalBasic
-  },
-  data () {
-    return {
-      showModal: false,
-      modalIndex: -1,
-      lists:
+  import ModalBasic from '~/components/ModalBasic'
+  import {initGeoLocation} from '~/common/api/gps'
+  import {dbReadOnce} from '~/common/api/firebase'
+  import _ from 'lodash';
+  export default {
+    data() {
+      return {
+        showModal: false,
+        modalIndex: -1,
+        lists : []
+/*
           [
             {
-              'avtSrc': 'http://hanasaka-kidan.com/wp-content/uploads/2016/11/35f2dca61c1d9c731d0c2ed665c2e3e3.png',
-              'name': 'Tom',
-              'sex': 'Man',
-              'country': 'Poland',
-              'distance': 'Nearby',
-              'itemSrcs':
-                [
-                  { itemImg: 'https://pbs.twimg.com/media/CZEpQUjVIAEhW95.jpg', name: 'food' },
-                  { itemImg: 'https://1.bp.blogspot.com/-RMiYwU4Oyac/WLEu9stl0bI/AAAAAAABCG8/fZOmyaPrYt86F5g5D6jcU854muwPLpTgACLcB/s800/sumo_rikishi_harite2.png', name: 'sport' },
-                  { itemImg: 'https://4.bp.blogspot.com/-bT8YdNC856Q/WZP3lL87D2I/AAAAAAABF_k/daOTZl5hLu4UqGFGvYaDczC1PbSxTxWiwCLcBGAs/s800/manga_genkou.png', name: 'anime' }
-                ]
-            },
-            {
-              'avtSrc': 'http://hanasaka-kidan.com/wp-content/uploads/2016/11/35f2dca61c1d9c731d0c2ed665c2e3e3.png',
-              'name': 'Ulrike',
-              'sex': 'Woman',
-              'country': 'Germany',
-              'distance': 'Far',
-              'itemSrcs':
+              'avtSrc' : "http://hanasaka-kidan.com/wp-content/uploads/2016/11/35f2dca61c1d9c731d0c2ed665c2e3e3.png",
+              'itemSrcs' :
                 [
                   { itemImg: 'https://pbs.twimg.com/media/CZEpQUjVIAEhW95.jpg', name: 'food' },
                   { itemImg: 'https://1.bp.blogspot.com/-RMiYwU4Oyac/WLEu9stl0bI/AAAAAAABCG8/fZOmyaPrYt86F5g5D6jcU854muwPLpTgACLcB/s800/sumo_rikishi_harite2.png', name: 'sport' },
@@ -130,7 +114,38 @@ export default {
                 ]
             }
           ]
-    };
-  }
-};
+*/
+        }
+    },
+    components : {
+      ModalBasic
+    },
+      mounted : function() {
+        initGeoLocation().then(geoLocation => {
+          console.log(geoLocation);
+          const mylongitude = geoLocation.longitude;
+          const mylatitude = geoLocation.latitude;
+          console.log(mylatitude)
+          const radius = 6371;
+          dbReadOnce('test/id').then(snapshot => {
+           snapshot.splice(0, 1);
+            for (let shot of snapshot) {
+              console.log(shot)
+              const diffLong = shot.gps[1]['longitude'] - mylongitude;
+              const diffLat = shot.gps[1]['latitude']-mylatitude;
+              console.log(diffLong, diffLat)
+              shot['distance'] = Math.PI/180 * radius * Math.sqrt(diffLong ** 2 + diffLat **2);
+              shot['distance'] = Math.round(shot['distance']);
+              shot['latitude']= shot.gps[1].latitude;
+              shot['longitude']= shot.gps[1].longitude;
+              shot['username'] = shot.gps[1].username;
+            }
+            this.lists = [...this.lists, ...snapshot];
+
+            _.sortBy(this.lists, 'distance');
+            console.log(snapshot);
+          });
+        });
+      }
+  };
 </script>
