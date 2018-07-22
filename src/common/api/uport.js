@@ -22,7 +22,7 @@ export const requestCredentials = (req) => {
     });
 };
 
-export let myCredential = {};
+export let myCredential = null;
 
 export const login = () => {
   return requestCredentials({
