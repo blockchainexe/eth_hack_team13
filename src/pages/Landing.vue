@@ -1,15 +1,19 @@
 <template>
   <div>
     <spinner v-if="loading"/>
+    <navbar-bottom/>
   </div>
 </template>
 
 <script>
 import { login } from '~/common/api/uport';
+import NavbarBottom from '~/components/NavbarBottom';
 import Spinner from '~/components/Spinner';
+
 export default {
   components: {
-    Spinner
+    Spinner,
+    NavbarBottom
   },
   data () {
     return {
