@@ -6,8 +6,8 @@
 
 <script>
 import { login } from '~/common/api/uport';
+import { updateUserGps } from '~/app';
 import Spinner from '~/components/Spinner';
-import {updateUserGps} from '~/app';
 export default {
   components: {
     Spinner

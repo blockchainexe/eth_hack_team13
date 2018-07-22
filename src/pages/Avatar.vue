@@ -1,60 +1,70 @@
 <template>
-  <div class="container">
-    <img id="avatar-img" :src="imgSrc" alt="Avatar Image">
-    <h2 id="user-name"> {{ userName }} </h2>
-    <button id="search-btn" @click="goToSearch">
-      Search New Friends
-    </button>
-    <button id="register-friend-btn" @click="registerFriendQR">
-      Register Friends
-    </button>
-    <button id="item-list-btn" @click="showItemModal=true">
-      Item List
-    </button>
-    <button id="friend-list-btn" @click="goToFriendList">
-      List of Friends
-    </button>
-    <modal-basic v-if="showItemModal" @close="showItemModal = false">
-      <h3 slot="header">Item List</h3>
-      <div slot="body">
-        <button @click="showItem='mine'">My Items</button>
-        <button @click="showItem='gift'">Giftable Items</button>
-        <ul v-if="showItem==='mine'" class="categories">
-          <li v-for="category in myItemList" v-if="category.itemList.length > 0">
-            <span> {{ category.categoryName }} </span>
-            <ul class="items">
-              <li v-for="item in category.itemList">
-                <img :src="item.itemImg">
-                {{ item.friendName }}
-              </li>
-            </ul>
-          </li>
-        </ul>
-        <ul v-if="showItem==='gift'" class="categories">
-          <li v-for="category in itemList" v-if="category.itemList.length>0">
-            <span > {{ category.categoryName }} </span>
-            <ul class="items">
-              <li v-for="item in category.itemList">
-                <img :src="item.itemImg">
-                {{ item.friendName }}
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-      <div slot="footer"/>
-    </modal-basic>
-    <modal-basic v-if="showChooseItemModal" @close="showChooseItemModal = false">
-      <h3 slot="header">Choose Item</h3>
-      <div slot="body">
-        <div v-for="option in ItemOptions">
-          <input v-model="selectItem" type="radio" :value="option.id"><img :src="option.imgSrc"/>
+  <div>
+    <navbar-top/>
+    <div class="container">
+      <div class="container-main">
+        <div class="left">
+          <img id="avatar-img" :src="imgSrc" alt="Avatar Image">
+        </div>
+        <div class="right">
+          <h2 id="user-name"> {{ userName }} </h2>
+          <button id="search-btn" @click="goToSearch">
+            Search New Friends
+          </button>
+          <button id="register-friend-btn" @click="registerFriendQR">
+            Register Friends
+          </button>
+          <button id="item-list-btn" @click="showItemModal=true">
+            Item List
+          </button>
+          <button id="friend-list-btn" @click="goToFriendList">
+            List of Friends
+          </button>
         </div>
       </div>
-      <div slot="footer">
-        <button @click="requestAddItem">選択</button>
-      </div>
-    </modal-basic>
+      <modal-basic v-if="showItemModal" @close="showItemModal = false">
+        <h3 slot="header">Item List</h3>
+        <div slot="body">
+          <button @click="showItem='mine'">My Items</button>
+          <button @click="showItem='gift'">Giftable Items</button>
+          <ul v-if="showItem==='mine'" class="categories">
+            <li v-for="category in myItemList" v-if="category.itemList.length > 0">
+              <span> {{ category.categoryName }} </span>
+              <ul class="items">
+                <li v-for="item in category.itemList">
+                  <img :src="item.itemImg">
+                  {{ item.friendName }}
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <ul v-if="showItem==='gift'" class="categories">
+            <li v-for="category in itemList" v-if="category.itemList.length>0">
+              <span > {{ category.categoryName }} </span>
+              <ul class="items">
+                <li v-for="item in category.itemList">
+                  <img :src="item.itemImg">
+                  {{ item.friendName }}
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div slot="footer"/>
+      </modal-basic>
+      <modal-basic v-if="showChooseItemModal" @close="showChooseItemModal = false">
+        <h3 slot="header">Choose Item</h3>
+        <div slot="body">
+          <div v-for="option in ItemOptions">
+            <input v-model="selectItem" :value="option.id" type="radio"><img :src="option.imgSrc">
+          </div>
+        </div>
+        <div slot="footer">
+          <button @click="requestAddItem">選択</button>
+        </div>
+      </modal-basic>
+    </div>
+    <navbar-bottom/>
   </div>
 </template>
 
@@ -62,9 +72,13 @@
 import { addFriend, addItem } from '~/common/api/uport';
 import { dbReadOnce } from '~/common/api/firebase';
 import ModalBasic from '~/components/ModalBasic';
+import NavbarBottom from '~/components/NavbarBottom';
+import NavbarTop from '~/components/NavbarTop';
 export default {
   components: {
-    ModalBasic
+    ModalBasic,
+    NavbarTop,
+    NavbarBottom
   },
   data () {
     return {
@@ -77,8 +91,8 @@ export default {
       showItem: 'mine',
       ItemOptions: [],
       showChooseItemModal: false,
-      itemDict: {food:[{id: 1, imgUrl: ""}, {id: 2, imgUrl: ""}, {id: 3, imgUrl: ""}], sport:[{id: 1, imgUrl: ""}, {id: 2, imgUrl: ""}, {id: 3, imgUrl: ""}], anime:[{id: 1, imgUrl: ""}, {id: 2, imgUrl: ""}, {id: 3, imgUrl: ""}]},
-      newFriend: {friendName: "", friendAddress: "", interest: ""},
+      itemDict: { food: [{ id: 1, imgUrl: '' }, { id: 2, imgUrl: '' }, { id: 3, imgUrl: '' }], sport: [{ id: 1, imgUrl: '' }, { id: 2, imgUrl: '' }, { id: 3, imgUrl: '' }], anime: [{ id: 1, imgUrl: '' }, { id: 2, imgUrl: '' }, { id: 3, imgUrl: '' }] },
+      newFriend: { friendName: '', friendAddress: '', interest: '' },
       selectItem: 0
     };
   },
@@ -112,14 +126,14 @@ export default {
   methods: {
     registerFriendQR: function () {
       addFriend().then(result => {
-          console.log(result.interest);
-          let items = this.itemDict[result.interest];
-          console.log(items);
-          this.ItemOptions = [...this.ItemOptions, ...items];
-          this.newFriend.friendName = result.friendName;
-          this.newFriend.friendAddress = result.friendAddress;
-          this.newFriend.interest = result.interest;
-          this.showChooseItemModal = true;
+        console.log(result.interest);
+        let items = this.itemDict[result.interest];
+        console.log(items);
+        this.ItemOptions = [...this.ItemOptions, ...items];
+        this.newFriend.friendName = result.friendName;
+        this.newFriend.friendAddress = result.friendAddress;
+        this.newFriend.interest = result.interest;
+        this.showChooseItemModal = true;
       });
     },
     goToFriendList: function () {
@@ -128,10 +142,10 @@ export default {
     goToSearch: function () {
       this.$router.push({ path: '/search', query: { search: [] } });
     },
-    requestAddItem: function() {
+    requestAddItem: function () {
       addItem(this.selectItem, this.newFriend).then(() => {
         this.showChooseItemModal = false;
-        this.myItemList[this.categoryList.indexOf(this.newFriend.interest)].itemList.push({itemImg: this.itemDict[this.newFriend.interest][this.selectItem].imgUrl, friendName: this.newFriend.friendName});
+        this.myItemList[this.categoryList.indexOf(this.newFriend.interest)].itemList.push({ itemImg: this.itemDict[this.newFriend.interest][this.selectItem].imgUrl, friendName: this.newFriend.friendName });
       });
     }
   }
@@ -142,12 +156,28 @@ export default {
 </style>
 <style lang="scss" scoped>
 .container{
+  box-sizing: border-box;
+  padding: 80px 0;
   height: 100%;
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
 }
+.container-main {
+  display: flex;
+  flex-direction: row;
+}
+
+.right {
+  width: 50%;
+  flex-grow: 1
+}
+
+.left {
+  flex-grow: 1
+}
+
 #avatar-img {
   padding: 60px;
   width: 70%;
