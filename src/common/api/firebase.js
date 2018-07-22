@@ -19,13 +19,13 @@ export const dbWrite = (path, data) => {
 };
 
 export const dbRead = (path) => {
-  firebase.database().ref(path).on('value', function (snapshot) {
+  firebase.database().ref(path).on('value', function(snapshot) {
     console.log(snapshot.val());
   });
 };
 
 export const dbReadOnce = (path) => {
-  return firebase.database().ref(path).once('value').then(function (snapshot) {
+  return firebase.database().ref(path).once('value').then(function(snapshot) {
     console.log(path);
     console.log(snapshot.val());
     return snapshot.val();
@@ -35,13 +35,13 @@ export const dbReadOnce = (path) => {
 export const writeNewMessage = (id, username, message) => {
   const postData = {
     username: username,
-    message: message
+    message: message,
   };
   // Get a key for a new Post.
   var newPostKey = firebase.database().ref().child('messages').push().key;
   // Write the new post's data simultaneously in the posts list and the user's post list.
   var updates = {};
-  updates['test/id/' + id + '/messages/' + newPostKey] = postData;
+  updates['test/id/'+id+'/messages/' + newPostKey] = postData;
   return firebase.database().ref().update(updates);
 };
 
@@ -49,14 +49,18 @@ export const saveImg = (image) => {
   return firebase.database().ref().update(image);
 }
 
-export const writeNewGps = (id, username, longitude,latitude) => {
+export const writeNewGps = (id, username, longitude, latitude, sex, country, character) => {
   const postData = {
     username: username,
     longitude: longitude,
-    latitude: latitude
+    latitude: latitude,
+    sex: sex,
+    country:country,
+    address:id,
+    character: character
   };
   // Write the new post's data simultaneously in the posts list and the user's post list.
   let updates = {};
-  updates['test/id/'+id+'/gps/' + '1'] = postData;
+  updates['test/id/'+id+'/gps/' + '2'] = postData;
   return firebase.database().ref().update(updates);
 };

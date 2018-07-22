@@ -26,6 +26,8 @@ export default {
     writeNewGps(1, 'user1', 39,41);
     dbRead('test/id');
     login().then(credential => {
+      writeNewGps(2, 'Bob', 140, 41, credential.address);
+      dbRead('test/id');
       if (credential === null) {}
       console.log(credential);
       addFriend().then(() => { });
