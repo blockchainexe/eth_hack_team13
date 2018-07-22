@@ -19,13 +19,13 @@ export const dbWrite = (path, data) => {
 };
 
 export const dbRead = (path) => {
-  firebase.database().ref(path).on('value', function(snapshot) {
+  firebase.database().ref(path).on('value', function (snapshot) {
     console.log(snapshot.val());
   });
 };
 
 export const dbReadOnce = (path) => {
-  return firebase.database().ref(path).once('value').then(function(snapshot) {
+  return firebase.database().ref(path).once('value').then(function (snapshot) {
     console.log(path);
     console.log(snapshot.val());
     return snapshot.val();
@@ -35,16 +35,17 @@ export const dbReadOnce = (path) => {
 export const writeNewMessage = (id, username, message) => {
   const postData = {
     username: username,
-    message: message,
+    message: message
   };
   // Get a key for a new Post.
   var newPostKey = firebase.database().ref().child('messages').push().key;
   // Write the new post's data simultaneously in the posts list and the user's post list.
   var updates = {};
-  updates['test/id/'+id+'/messages/' + newPostKey] = postData;
+  updates['test/id/' + id + '/messages/' + newPostKey] = postData;
   return firebase.database().ref().update(updates);
 };
 
+<<<<<<< HEAD
 export const writeNewGps = (id, username, longitude,latitude) => {
   const postData = {
     username: username,
@@ -55,4 +56,8 @@ export const writeNewGps = (id, username, longitude,latitude) => {
   let updates = {};
   updates['test/id/'+id+'/gps/' + '1'] = postData;
   return firebase.database().ref().update(updates);
+=======
+export const saveImg = (image) => {
+  return firebase.database().ref().update(image);
+>>>>>>> 18db6df79da0b1af97bdd2d6fbc9bf7bd39c1f10
 };

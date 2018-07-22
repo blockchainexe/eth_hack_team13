@@ -17,8 +17,8 @@
     <modal-basic v-if="showItemModal" @close="showItemModal = false">
       <h3 slot="header">Item List</h3>
       <div slot="body">
-        <button @click="showItem='mine'">My Item</button>
-        <button @click="showItem='gift'">Giftable Item</button>
+        <button @click="showItem='mine'">My Items</button>
+        <button @click="showItem='gift'">Giftable Items</button>
         <ul v-if="showItem==='mine'" class="categories">
           <li v-for="category in myItemList" v-if="category.itemList.length > 0">
             <span> {{ category.categoryName }} </span>
@@ -44,13 +44,24 @@
       </div>
       <div slot="footer"/>
     </modal-basic>
+    <modal-basic v-if="showChooseItemModal" @close="showChooseItemModal = false">
+      <h3 slot="header">Choose Item</h3>
+      <div slot="body">
+        <div v-for="option in ItemOptions">
+          <input v-model="selectItem" type="radio" :value="option.id"><img :src="option.imgSrc"/>
+        </div>
+      </div>
+      <div slot="footer">
+        <button @click="requestAddItem">選択</button>
+      </div>
+    </modal-basic>
   </div>
 </template>
 
 <script>
-import { addFriend } from '~/common/api/uport';
+import { addFriend, addItem } from '~/common/api/uport';
+import { dbReadOnce } from '~/common/api/firebase';
 import ModalBasic from '~/components/ModalBasic';
-import {dbReadOnce} from '~/common/api/firebase';
 export default {
   components: {
     ModalBasic
@@ -62,13 +73,18 @@ export default {
       showItemModal: false,
       itemList: [],
       myItemList: [],
-      categoryList: ['Food', 'Sports', 'Anime'],
-      showItem: 'mine'
+      categoryList: ['food', 'sport', 'anime'],
+      showItem: 'mine',
+      ItemOptions: [],
+      showChooseItemModal: false,
+      itemDict: {food:[{id: 1, imgUrl: ""}, {id: 2, imgUrl: ""}, {id: 3, imgUrl: ""}], sport:[{id: 1, imgUrl: ""}, {id: 2, imgUrl: ""}, {id: 3, imgUrl: ""}], anime:[{id: 1, imgUrl: ""}, {id: 2, imgUrl: ""}, {id: 3, imgUrl: ""}]},
+      newFriend: {friendName: "", friendAddress: "", interest: ""},
+      selectItem: 0
     };
   },
   created: function () {
     console.log(this.$route.query.itemList);
-    dbReadOnce('img/'+this.$route.query.character+'/imgUrl').then(src => {
+    dbReadOnce('img/' + this.$route.query.character + '/imgUrl').then(src => {
       this.imgSrc = src;
       console.log(this.imgSrc);
       this.userName = this.$route.query.userName;
@@ -95,13 +111,28 @@ export default {
   },
   methods: {
     registerFriendQR: function () {
-      addFriend().then();
+      addFriend().then(result => {
+          console.log(result.interest);
+          let items = this.itemDict[result.interest];
+          console.log(items);
+          this.ItemOptions = [...this.ItemOptions, ...items];
+          this.newFriend.friendName = result.friendName;
+          this.newFriend.friendAddress = result.friendAddress;
+          this.newFriend.interest = result.interest;
+          this.showChooseItemModal = true;
+      });
     },
     goToFriendList: function () {
       this.$router.push({ path: '/friends-list', query: { friendList: [] } });
     },
     goToSearch: function () {
       this.$router.push({ path: '/search', query: { search: [] } });
+    },
+    requestAddItem: function() {
+      addItem(this.selectItem, this.newFriend).then(() => {
+        this.showChooseItemModal = false;
+        this.myItemList[this.categoryList.indexOf(this.newFriend.interest)].itemList.push({itemImg: this.itemDict[this.newFriend.interest][this.selectItem].imgUrl, friendName: this.newFriend.friendName});
+      });
     }
   }
 };

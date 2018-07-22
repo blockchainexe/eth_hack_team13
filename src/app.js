@@ -1,10 +1,12 @@
 import 'normalize.css';
 import '~/assets/styles/base.scss';
+import { initDB } from '~/common/api/firebase';
 import { routes } from '~/routes/router';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import {initDB} from '~/common/api/firebase';
+
 initDB();
+
 Vue.use(VueRouter);
 const router = new VueRouter({
   routes: routes

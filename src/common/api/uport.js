@@ -3,10 +3,14 @@ export const uport = new Connect('InfluProject', {
   clientId: '2ormFtJUNdsqpuTx2CmWYTpGQLLFVznTE99',
   network: 'rinkeby',
   signer: SimpleSigner('43472279797a521ac2f414e771d7b36f6165dad491fe101079146030735dbb19')
-//   clientId: '2opHwbnmU9zi3Q8jE16zuXSWXJ42UUBRiEB',
-//   network: 'rinkeby',
-//   signer: SimpleSigner('e4f87c095dc07b64524ed4aa691b13ad1f8aaf1118eb0991813c608625cc0dd3')
 });
+
+const uportFriend = new Connect('InfluProject', {
+  clientId: '2ormFtJUNdsqpuTx2CmWYTpGQLLFVznTE99',
+  network: 'rinkeby',
+  signer: SimpleSigner('43472279797a521ac2f414e771d7b36f6165dad491fe101079146030735dbb19')
+});
+
 export const web3 = uport.getWeb3();
 
 export const requestCredentials = (req) => {
@@ -21,7 +25,11 @@ export const requestCredentials = (req) => {
 export let myCredential = {};
 
 export const login = () => {
-  return requestCredentials({ requested: ['name', 'country'], verified: ['friend', 'profile'] }).then(credential => {
+  return requestCredentials({
+    requested: ['name', 'country'],
+    verified: ['friend', 'profile', 'interest'],
+    notifications: true
+  }).then(credential => {
     myCredential = credential;
     let notFound = true;
     for (let v of myCredential.verified) {
@@ -41,7 +49,7 @@ export const attestCredentials = claim => {
   return uport.attestCredentials({
     sub: myCredential.address,
     claim: claim,
-    notification: true
+    notifications: true
   }).then(res => res)
     .catch(error => {
       console.error(error);
@@ -50,13 +58,33 @@ export const attestCredentials = claim => {
 };
 
 export const addFriend = () => {
-  return requestCredentials({ requested: ['name', 'country'] }).then(friend => {
-    setTimeout(() => {
-      return attestCredentials({
-        'friend': { address: friend.address, name: friend.name, country: friend.country }
-      });
-    }, 1000);
+  return uportFriend.requestCredentials({ requested: ['name', 'country'], verified: ['profile'], notifications: false }).then(friend => {
+    return new Promise((resolve, reject) =>{
+      setTimeout(() => {
+         attestCredentials({
+          'friend': { address: friend.address, name: friend.name, country: friend.country }
+        }).then(result => {
+          console.log(result);
+          if(result === "ok"){
+            console.log(friend.profile.interest);
+            resolve({interest: friend.profile.interest, friendAddress: friend.address, friendName: friend.name});
+          } else {
+            reject({});
+          }
+        });
+      }, 1000);
+    })
   });
+};
+
+export const addItem = (item, friend) => {
+  return new Promise((resolve, reject) =>{
+    setTimeout(() => {
+        return attestCredentials({
+          'item': { friendAddress: friend.friendAddress, friendName: friend.friendName, itemId: item, categoryName: friend.interest }
+        }).then(resolve());
+      }, 1000);
+    });
 };
 
 export const getFriendList = () => {

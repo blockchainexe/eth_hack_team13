@@ -6,7 +6,7 @@
         <button class="show-modal" @click="modalIndex = index">
 <!--          <span class = "search_avatar"><img :src="list.avtSrc" class="avatar-img" alt="Avatar Image"></span> -->
           <span class = "search_name">{{ list.username }}</span>
-          <span class = "search_name">{{ list.distance }}</span>
+          <span class = "search_name">{{ list.distance + ' km'}}</span>
 <!--          <span v-for="itemSrc in list.itemSrcs" class = "search_item">
             <img :src="itemSrc.itemImg" class="item-img" alt="Item Image">
           </span>  -->
