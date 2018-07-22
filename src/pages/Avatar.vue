@@ -1,5 +1,6 @@
 <template>
   <div>
+    <spinner v-if="loading"/>
     <navbar-top/>
     <div class="container">
       <div class="container-main">
@@ -52,7 +53,7 @@
         </div>
         <div slot="footer"/>
       </modal-basic>
-      <modal-basic v-if="showChooseItemModal" @close="showChooseItemModal = false">
+      <modal-basic v-if="showChooseItemModal" @close="showChooseItemModal = false" id="chooseItemModal">
         <h3 slot="header">Choose Item</h3>
         <div slot="body">
           <div v-for="option in ItemOptions" class="itemList">
@@ -74,11 +75,13 @@ import { dbReadOnce } from '~/common/api/firebase';
 import ModalBasic from '~/components/ModalBasic';
 import NavbarBottom from '~/components/NavbarBottom';
 import NavbarTop from '~/components/NavbarTop';
+import Spinner from '~/components/Spinner';
 export default {
   components: {
     ModalBasic,
     NavbarTop,
-    NavbarBottom
+    NavbarBottom,
+    Spinner
   },
   data () {
     return {
@@ -93,8 +96,25 @@ export default {
       showChooseItemModal: false,
       itemDict: {food:[{id: 1, imgUrl: "https://pbs.twimg.com/media/CZEpQUjVIAEhW95.jpg"}, {id: 2, imgUrl: "http://houraikai.or.jp/wp-content/uploads/2017/04/nigirizushi_moriawase.png"}, {id: 3, imgUrl: "http://livedoor.blogimg.jp/buzzrall/imgs/b/3/b3dbae38.jpg"}], sport:[{id: 1, imgUrl: "https://1.bp.blogspot.com/-RMiYwU4Oyac/WLEu9stl0bI/AAAAAAABCG8/fZOmyaPrYt86F5g5D6jcU854muwPLpTgACLcB/s800/sumo_rikishi_harite2.png"}, {id: 2, imgUrl: "http://cpimages.s3.amazonaws.com/system/samples/work/sample/166916/large_10_.png"}, {id: 3, imgUrl: "https://3.bp.blogspot.com/-v_oGK4YfIk4/UV1I_tUcFlI/AAAAAAAAPQ0/p9xViZSaSr4/s1600/judo_boy.png"}], anime:[{id: 1, imgUrl: "http://livedoor.blogimg.jp/ayunet55/imgs/3/9/392b0bfe.jpg"}, {id: 2, imgUrl: "https://eizandensha.co.jp/event/wp-content/uploads/sites/11/2017/03/aoba.jpg"}, {id: 3, imgUrl: "http://realsound.jp/wp-content/uploads/2017/11/20171125-3lion-1-950x534.jpg"}]},
       newFriend: {friendName: "", friendAddress: "", interest: ""},
-      selectItem: 0
+      selectItem: 0,
+      loading: false
     };
+  },
+  mounted () {
+    const monitorModal = setInterval(() => {
+      const modal = document.getElementById('uport-qr');
+      if (modal === null) {
+        return;
+      }
+      const qr = modal.getElementsByTagName('img');
+      if (qr.length) {
+        /* アニメーション対策 */
+        setTimeout(() => {
+          this.loading = true;
+          clearInterval(monitorModal);
+        }, 1000);
+      }
+    }, 100);
   },
   created: function () {
     console.log(this.$route.query.itemList);
@@ -135,10 +155,12 @@ export default {
         console.log(result.interest);
         let items = this.itemDict[result.interest];
         console.log(items);
+        this.ItemOptions = [];
         this.ItemOptions = [...this.ItemOptions, ...items];
         this.newFriend.friendName = result.friendName;
         this.newFriend.friendAddress = result.friendAddress;
         this.newFriend.interest = result.interest;
+        this.loading = false;
         this.showChooseItemModal = true;
       });
     },
@@ -149,8 +171,10 @@ export default {
       this.$router.push({ path: '/search', query: { search: [] } });
     },
     requestAddItem: function () {
+      //this.loading = true;
+      this.showChooseItemModal = false;
       addItem(this.selectItem, this.newFriend).then(() => {
-        this.showChooseItemModal = false;
+        //this.loading = false;
         if(this.myItemList[this.categoryList.indexOf(this.newFriend.interest)]){
           this.myItemList[this.categoryList.indexOf(this.newFriend.interest)].itemList.push({itemImg: this.itemDict[this.newFriend.interest][this.selectItem-1].imgUrl, friendName: this.newFriend.friendName});
         }else {
@@ -264,5 +288,4 @@ ul img {
   flex-direction: row;
   align-items: center;
 }
-
 </style>
