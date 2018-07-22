@@ -24,20 +24,15 @@
 import { endChatSession, sendChatMessage, startChatSession } from '~/common/api/chat';
 import { myCredential } from '~/common/api/uport';
 export default {
-  props: {
-    chatRoomId: {
-      required: false,
-      default: 'test',
-      type: String
-    }
-  },
   data () {
     return {
+      chatRoomId: '',
       message: '',
       chatLog: []
     };
   },
   created () {
+    this.chatRoomId = this.$route.query.room;
   },
   mounted () {
     startChatSession(this.chatRoomId, snapShot => {
