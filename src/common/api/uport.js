@@ -27,7 +27,7 @@ export let myCredential = {};
 export const login = () => {
   return requestCredentials({
     requested: ['name', 'country'],
-    verified: ['friend', 'profile'],
+    verified: ['friend', 'profile', 'interest'],
     notifications: true
   }).then(credential => {
     myCredential = credential;
@@ -48,7 +48,8 @@ export const login = () => {
 export const attestCredentials = claim => {
   return uport.attestCredentials({
     sub: myCredential.address,
-    claim: claim
+    claim: claim,
+    notifications: true
   }).then(res => res)
     .catch(error => {
       console.error(error);
@@ -57,13 +58,33 @@ export const attestCredentials = claim => {
 };
 
 export const addFriend = () => {
-  return uportFriend.requestCredentials({ requested: ['name', 'country'], notifications: false }).then(friend => {
-    setTimeout(() => {
-      return attestCredentials({
-        'friend': { address: friend.address, name: friend.name, country: friend.country }
-      });
-    }, 1000);
+  return uportFriend.requestCredentials({ requested: ['name', 'country'], verified: ['profile'], notifications: false }).then(friend => {
+    return new Promise((resolve, reject) =>{
+      setTimeout(() => {
+         attestCredentials({
+          'friend': { address: friend.address, name: friend.name, country: friend.country }
+        }).then(result => {
+          console.log(result);
+          if(result === "ok"){
+            console.log(friend.profile.interest);
+            resolve({interest: friend.profile.interest, friendAddress: friend.address, friendName: friend.name});
+          } else {
+            reject({});
+          }
+        });
+      }, 1000);
+    })
   });
+};
+
+export const addItem = (item, friend) => {
+  return new Promise((resolve, reject) =>{
+    setTimeout(() => {
+        return attestCredentials({
+          'item': { friendAddress: friend.friendAddress, friendName: friend.friendName, itemId: item, categoryName: friend.interest }
+        }).then(resolve());
+      }, 1000);
+    });
 };
 
 export const getFriendList = () => {
